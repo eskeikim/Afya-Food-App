@@ -1,4 +1,4 @@
-package com.apps.skimani.afyafood.ui.notifications
+package com.apps.skimani.afyafood.ui.preference
 
 import android.os.Bundle
 import android.view.LayoutInflater

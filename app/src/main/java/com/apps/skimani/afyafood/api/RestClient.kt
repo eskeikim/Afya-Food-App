@@ -17,7 +17,7 @@ object RestClient {
     const val REQUEST_TIMEOUT = 60
 
     /**
-     * SSL Certificate pinning
+     * SSL Encryption Certificate pinning-
      * to this specific endpoint to eliminate man in the middle attack
      */
     var certificatePinner = CertificatePinner.Builder()

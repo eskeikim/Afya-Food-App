@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.apps.skimani.afyafood.ui.dashboard.AddMealFragment"
+        android:name="com.apps.skimani.afyafood.ui.add.AddMealFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_add_meal" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.apps.skimani.afyafood.ui.notifications.PreferenceFragment"
+        android:name="com.apps.skimani.afyafood.ui.preference.PreferenceFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_preferences" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.apps.skimani.afyafood.ui.dashboard
+package com.apps.skimani.afyafood.ui.add
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
