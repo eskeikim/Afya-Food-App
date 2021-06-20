@@ -1,6 +1,7 @@
 package com.apps.skimani.afyafood.api
 
 import com.apps.skimani.afyafood.models.FoodResponse
+import com.apps.skimani.afyafood.models.InstantFoodItemResponse
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -24,6 +25,6 @@ interface AfyaApiService {
      * @return
      */
     @GET("search/instant")
-    suspend fun fetchInstantItems(@Query("query") query: String): Response<FoodResponse>
+    suspend fun fetchInstantItems(@Query("query") query: String): Response<InstantFoodItemResponse>
 
 }
