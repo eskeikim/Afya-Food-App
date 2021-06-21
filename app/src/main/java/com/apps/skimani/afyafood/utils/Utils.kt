@@ -11,16 +11,24 @@ import org.json.JSONObject
  * Utility Class for this project
  *
  */
-class Utils {
-    companion object{
-        /**
-         * Converts a Json Object
-         * to a Request body with specified media Type
-         * @param requestJson
-         * @return
-         */
-        fun getRequestBody(requestJson: JSONObject): RequestBody {
-            return requestJson.toString().toRequestBody("application/json".toMediaTypeOrNull())
+//class Utils {
+//
+//    companion object {
+//        /**
+//         * Converts a Json Object
+//         * to a Request body with specified media Type
+//         * @param requestJson
+//         * @return
+//         */
+//        fun getRequestBody(requestJson: JSONObject): RequestBody {
+//            return requestJson.toString().toRequestBody("application/json".toMediaTypeOrNull())
+//        }
+//    }
+//}
+    class Utils {
+        companion object{
+            fun getRequestBody(requestJson: JSONObject): RequestBody {
+                return requestJson.toString().toRequestBody("application/json".toMediaTypeOrNull())
+            }
         }
     }
-}

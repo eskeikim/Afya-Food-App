@@ -21,7 +21,7 @@ data class InstantFoodItemResponse(
         @SerializedName("locale")
         val locale: String, // en_US
         @SerializedName("nf_calories")
-        val nfCalories: Int, // 440
+        val nfCalories: Any, // 440
         @SerializedName("nix_brand_id")
         val nixBrandId: String, // 59e901517bcefb95678b5998
         @SerializedName("nix_item_id")

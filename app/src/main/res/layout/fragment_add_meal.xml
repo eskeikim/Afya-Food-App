@@ -26,7 +26,6 @@
                 android:paddingStart="@dimen/normal_margin"
                 android:background="@drawable/rounded_gray_bg"
                 android:hint="Search food items eg. 2 cups of rice"
-                android:layout_marginTop="@dimen/normal_margin"
                 android:layout_marginStart="@dimen/normal_margin"
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:dropDownSelector="@color/purple_700"

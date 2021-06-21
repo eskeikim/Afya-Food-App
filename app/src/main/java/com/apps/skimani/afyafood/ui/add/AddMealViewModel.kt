@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.apps.skimani.afyafood.models.FoodResponse
 import com.apps.skimani.afyafood.models.InstantFoodItemResponse
 import com.apps.skimani.afyafood.repository.AfyaRepository
 import com.apps.skimani.afyafood.ui.home.HomeViewModel
@@ -18,6 +19,10 @@ class AddMealViewModel(app: Application) : ViewModel() {
     private var _mealsSearch = MutableLiveData<NetworkResult<InstantFoodItemResponse>>()
     val mealsSearch: MutableLiveData<NetworkResult<InstantFoodItemResponse>>
         get() = _mealsSearch
+    private var _foodItem = MutableLiveData<NetworkResult<FoodResponse>>()
+    val foodItem: MutableLiveData<NetworkResult<FoodResponse>>
+        get() = _foodItem
+
     private var _error = MutableLiveData<String>()
     val error: LiveData<String>
         get() = _error
@@ -30,7 +35,7 @@ class AddMealViewModel(app: Application) : ViewModel() {
 
     }
 
-   fun getFoodItems(query: String){
+   fun getInstantItems(query: String){
        uiScope.launch {
            val data=afyaRepository.getInstantfood(query)
            when(data){
@@ -45,6 +50,24 @@ class AddMealViewModel(app: Application) : ViewModel() {
            }
        }
    }
+
+   fun getFoodItems(query: String){
+       uiScope.launch {
+           val data=afyaRepository.getfoodItem(query)
+           when(data){
+               is NetworkResult.Success->{
+                   Timber.d("Data ${data}")
+                   _foodItem.postValue(data)
+               }
+               is NetworkResult.Error->{
+                   Timber.d("Data error ${data.exception.message}")
+                   _error.postValue("Error ")
+               }
+           }
+       }
+   }
+
+
     override fun onCleared() {
         super.onCleared()
         uiScope.cancel()
