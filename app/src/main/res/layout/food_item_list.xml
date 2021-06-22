@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+  <variable
+      name="foodItem"
+      type="com.apps.skimani.afyafood.database.FoodItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,16 +19,18 @@
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            app:foodImage="@{foodItem.image}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_baseline_food_bank_24" />
+            tools:src="@drawable/ic_baseline_food_bank_24" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Berry Blue"
+            tools:text="Berry Blue"
+            app:generalName="@{foodItem.foodName}"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/food_imageView"
@@ -38,7 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textSize="@dimen/_12sp"
-            android:text="Turn- E tummies"
+            app:generalName="@{foodItem.brandName}"
+            tools:text="Turn- E tummies"
             app:layout_constraintStart_toStartOf="@+id/name"
             app:layout_constraintTop_toBottomOf="@+id/name" />
 
@@ -49,7 +54,7 @@
             android:layout_marginEnd="16dp"
             android:text="cal"
             android:textSize="@dimen/_14sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/removeBtn"
             app:layout_constraintTop_toTopOf="@+id/name" />
 
         <TextView
@@ -57,11 +62,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="67"
+            tools:text="67"
+            app:generalName="@{foodItem.calories}"
             android:textSize="@dimen/_12sp"
             android:textColor="@color/colorRed"
-            app:layout_constraintEnd_toEndOf="@+id/no_calories"
+            app:layout_constraintStart_toStartOf="@+id/no_calories"
             app:layout_constraintTop_toBottomOf="@+id/no_calories" />
+
+        <ImageView
+            android:id="@+id/removeBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_baseline_cancel_24"
+            app:layout_constraintBottom_toBottomOf="@+id/food_imageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/food_imageView" />
 
         <View
             android:layout_width="match_parent"

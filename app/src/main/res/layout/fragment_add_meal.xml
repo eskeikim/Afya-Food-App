@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+<variable
+    name="viewModel"
+    type="com.apps.skimani.afyafood.ui.add.AddMealViewModel" />
     </data>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -23,13 +25,25 @@
             <AutoCompleteTextView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_55dp"
-                android:paddingStart="@dimen/normal_margin"
                 android:background="@drawable/rounded_gray_bg"
                 android:hint="Search food items eg. 2 cups of rice"
                 android:layout_marginStart="@dimen/normal_margin"
                 android:layout_marginEnd="@dimen/normal_margin"
-                android:dropDownSelector="@color/purple_700"
+                android:dropDownSelector="@color/purple_200"
                 android:id="@+id/searchAutoComplete"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/footItemRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:itemCount="4"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                app:listFoodtems="@{viewModel.foodItemTempValue}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="vertical"
+                tools:listitem="@layout/food_item_list"
+                />
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tiAmount"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
