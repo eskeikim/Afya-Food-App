@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+<variable
+    name="meal"
+    type="com.apps.skimani.afyafood.database.Meal" />
     </data>
 <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
@@ -49,6 +51,7 @@
             android:gravity="start"
             android:textSize="20sp"
             android:textStyle="bold"
+            app:generalName="@{meal.name}"
             app:layout_constraintStart_toEndOf="@+id/mealImage"
             app:layout_constraintTop_toTopOf="@+id/mealImage"
             tools:text="Githeri" />

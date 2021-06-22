@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.apps.skimani.afyafood.R
 import com.apps.skimani.afyafood.databinding.FragmentHomeBinding
 import com.apps.skimani.afyafood.models.FoodResponse
+import timber.log.Timber
 
 class HomeFragment : Fragment() {
 
@@ -38,7 +39,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupObservers() {
+        homeViewModel.allMeals.observe(viewLifecycleOwner, Observer {
+            if (it!=null) {
+                Timber.e("Meals Success from ROOM ${it.size}")
+                for (item in it){
+                    Timber.d("Meal Name ${item.name} >> ${item.totalCalories}")
 
+                }
+            }
+        })
     }
 
 }

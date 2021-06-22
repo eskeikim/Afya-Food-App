@@ -45,7 +45,7 @@
                 tools:listitem="@layout/food_item_list"
                 />
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tiAmount"
+                android:id="@+id/tiMealName"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                 android:hint="Enter Meal Name">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/amount"
+                    android:id="@+id/mealName"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:inputType="textCapWords" />
@@ -131,7 +131,7 @@
                     android:inputType="textCapWords" />
             </com.google.android.material.textfield.TextInputLayout>
             <Button
-                android:id="@+id/btnPay"
+                android:id="@+id/btnSave"
                 style="@style/MaterialButtonAddMeal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations
 import com.apps.skimani.afyafood.api.RestClient
 import com.apps.skimani.afyafood.database.AfyaDb
 import com.apps.skimani.afyafood.database.FoodItem
+import com.apps.skimani.afyafood.database.Meal
 import com.apps.skimani.afyafood.models.FoodResponse
 import com.apps.skimani.afyafood.models.InstantFoodItemResponse
 import com.apps.skimani.afyafood.utils.safeApiCall
@@ -19,51 +20,53 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.io.IOException
 
-class AfyaRepository(private val database:AfyaDb) {
+class AfyaRepository(private val database: AfyaDb) {
 
 //    private var _foodItemTemp = MutableLiveData<List<FoodItem>>()
 //    val foodItemTemp: LiveData<List<FoodItem>>
 //        get() = database.foodItem.getItems()
 
 
-suspend fun getInstantfood(query: String) = safeApiCall(
-     call = {getInstanttems(query) },
-    errorMessage= "Error occurred"
-)
+    suspend fun getInstantfood(query: String) = safeApiCall(
+        call = { getInstanttems(query) },
+        errorMessage = "Error occurred"
+    )
 
-    private suspend fun getInstanttems(query:String): NetworkResult<InstantFoodItemResponse> {
-    val response=RestClient.apiService.fetchInstantItems(query)
+    private suspend fun getInstanttems(query: String): NetworkResult<InstantFoodItemResponse> {
+        val response = RestClient.apiService.fetchInstantItems(query)
         return when {
-            response.isSuccessful->{
+            response.isSuccessful -> {
                 Timber.d("repo Data ${response.body()}")
-                NetworkResult.Success(response.body()!! )
+                NetworkResult.Success(response.body()!!)
             }
-            else->{
+            else -> {
                 Timber.d("repo error ${response.code()}")
                 NetworkResult.Error(IOException("Error fetching the food"))
             }
         }
     }
-suspend fun getfoodItem(query: String) = safeApiCall(
-     call = {getFoodtems(query) },
-    errorMessage= "Error occurred"
-)
 
-    private suspend fun getFoodtems(query:String): NetworkResult<FoodResponse> {
-        val jsObj= JSONObject()
-        jsObj.put("query",query)
-    val response=RestClient.apiService.listFoodItem(getRequestBody(jsObj))
+    suspend fun getfoodItem(query: String) = safeApiCall(
+        call = { getFoodtems(query) },
+        errorMessage = "Error occurred"
+    )
+
+    private suspend fun getFoodtems(query: String): NetworkResult<FoodResponse> {
+        val jsObj = JSONObject()
+        jsObj.put("query", query)
+        val response = RestClient.apiService.listFoodItem(getRequestBody(jsObj))
         return when {
-            response.isSuccessful->{
+            response.isSuccessful -> {
                 Timber.d("repo Data ${response.body()}")
-                NetworkResult.Success(response.body()!! )
+                NetworkResult.Success(response.body()!!)
             }
-            else->{
+            else -> {
                 Timber.d("repo error ${response.code()}")
                 NetworkResult.Error(IOException("Error fetching the food"))
             }
         }
     }
+
     fun getRequestBody(requestJson: JSONObject): RequestBody {
         return requestJson.toString().toRequestBody("application/json".toMediaTypeOrNull())
     }
@@ -72,15 +75,23 @@ suspend fun getfoodItem(query: String) = safeApiCall(
      * Return a list of foodItems to be displayed
      */
 
- val foodItems: LiveData<List<FoodItem>> =
-        Transformations.map(database.foodItem.getItems()){
+    val foodItems: LiveData<List<FoodItem>> =
+        Transformations.map(database.foodItem.getItems()) {
             it.reversed()
         }
-suspend fun fetchValue():List<FoodItem>?{
-    return withContext(Dispatchers.IO) {
-        database.foodItem.getItemsValue()
+
+    suspend fun fetchValue(): List<FoodItem>? {
+        return withContext(Dispatchers.IO) {
+            database.foodItem.getItemsValue()
+        }
     }
-}
+
+    suspend fun fetchAllMeals(): List<Meal>? {
+        return withContext(Dispatchers.IO) {
+            database.foodItem.getAllMeals()
+        }
+    }
+
     /**
      * Store the food items temporarily in the offline cache.
      *
@@ -94,6 +105,17 @@ suspend fun fetchValue():List<FoodItem>?{
         withContext(Dispatchers.IO) {
             database.foodItem.insertAll(foodItem)
             Timber.d("Fetch DB ${database.foodItem.getItems().value}")
+        }
+    }
+
+    /**
+     *Store the user mealin Room DB
+     * @param meal
+     */
+    suspend fun saveAMeal(meal: Meal) {
+        withContext(Dispatchers.IO) {
+            database.foodItem.saveMeal(meal)
+            Timber.d("Fetch DB ${database.foodItem.getAllMeals()}")
         }
     }
 }

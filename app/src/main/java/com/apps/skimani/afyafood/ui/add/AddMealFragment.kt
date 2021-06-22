@@ -3,11 +3,11 @@ package com.apps.skimani.afyafood.ui.add
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +15,7 @@ import com.apps.skimani.afyafood.R
 import com.apps.skimani.afyafood.adapters.FoodItemAdpater
 import com.apps.skimani.afyafood.adapters.InstantFoodSearchAdapter
 import com.apps.skimani.afyafood.database.FoodItem
+import com.apps.skimani.afyafood.database.Meal
 import com.apps.skimani.afyafood.databinding.FragmentAddMealBinding
 import com.apps.skimani.afyafood.models.BrandedList
 import com.apps.skimani.foodie.utils.NetworkResult
@@ -28,6 +29,7 @@ class AddMealFragment : Fragment() {
     private  val tempBrandedList=ArrayList<BrandedList>()
     private  val tempFoodItemList=ArrayList<FoodItem>()
     private lateinit var autoCompleteAdapter: ArrayAdapter<String>
+    private lateinit var foodItem:List<FoodItem>
     private val addMealViewModel: AddMealViewModel by lazy {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onViewCreated()"
@@ -52,10 +54,25 @@ class AddMealFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        initViews()
+        initViews()
         namelist=ArrayList<String>()
         getData("car")
         setupObservers()
+    }
+
+    private fun initViews() {
+
+        binding.btnSave.setOnClickListener {
+            val mealName=binding.serving.text.toString()
+            val serving=binding.serving.text.toString()
+            val calories=binding.calories.text.toString()
+            val time=binding.time.text.toString()
+            val day=binding.day.text.toString()
+
+            val meal=Meal(mealName,time,day,calories,serving)
+            addMealViewModel.saveAMealRoomDB(meal)
+            Toast.makeText(requireContext(),"Meal inserted successfully",Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun getData(query:String) {
@@ -88,23 +105,25 @@ class AddMealFragment : Fragment() {
 //                        namelist.add(name.brandName)
 //                        Timber.d("Name ${name.brandName}")
 //                    }
-                    initViews(it)
+                    initAutoComplete(it)
         })
         binding.footItemRv.adapter=FoodItemAdpater(FoodItemAdpater.OnClickListener{
 
         })
         addMealViewModel.tempFoodItems.observe(viewLifecycleOwner, Observer {
             if (it!=null) {
-                Timber.e("Success from ROOM ${it.size} ${it[2]}")
+                Timber.e("Item Success from ROOM ${it.size} ")
+                foodItem=it
                 for (item in it){
                     Timber.d("Item Name ${item.foodName} >> ${item.calories}")
 
                 }
             }
         })
+
     }
 
-    private fun initViews(list: List<BrandedList>) {
+    private fun initAutoComplete(list: List<BrandedList>) {
         val mDepartmentList = Arrays.asList(list);
         val instantAdapter=InstantFoodSearchAdapter(requireContext(),R.layout.instant_search_item_list,
             list

@@ -5,23 +5,41 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
+import com.apps.skimani.afyafood.database.Meal
+import com.apps.skimani.afyafood.database.getDatabase
+import com.apps.skimani.afyafood.repository.AfyaRepository
+import kotlinx.coroutines.*
+import timber.log.Timber
 
-class HomeViewModel(app:Application) : ViewModel() {
-    private var mealsJob= Job()
-    private val uiScope= CoroutineScope(mealsJob + Dispatchers.IO)
+class HomeViewModel(app: Application) : ViewModel() {
+    private var mealsJob = Job()
+    private val uiScope = CoroutineScope(mealsJob + Dispatchers.IO)
+
+    private val database = getDatabase(app)
+    private val afyaRepository = AfyaRepository(database)
+
+    var _allMeals = MutableLiveData<List<Meal>?>()
+    val allMeals: LiveData<List<Meal>?>
+        get() = _allMeals
 
     init {
+        getAllMeals()
+    }
 
+
+    fun getAllMeals() {
+        uiScope.launch {
+            val data = afyaRepository.fetchAllMeals()
+            Timber.d("ALL MEALS ${data}")
+            _allMeals.postValue(data)
+        }
     }
 
     override fun onCleared() {
         super.onCleared()
         uiScope.cancel()
     }
+
     /**
      * Factory for constructing HomeViewModel with parameter
      */

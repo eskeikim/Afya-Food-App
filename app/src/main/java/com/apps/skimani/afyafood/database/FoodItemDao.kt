@@ -15,5 +15,12 @@ interface FoodItemDao {
     suspend fun getItemsValue(): List<FoodItem>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg videos: FoodItem)
+    fun insertAll(vararg foodItem: FoodItem)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun saveMeal(vararg meal: Meal)
+
+    @Query("select * from Meal")
+    suspend fun getAllMeals(): List<Meal>?
+
 }
