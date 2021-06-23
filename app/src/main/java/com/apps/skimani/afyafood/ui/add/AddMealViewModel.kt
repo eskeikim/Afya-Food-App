@@ -33,7 +33,7 @@ class AddMealViewModel(app: Application) : ViewModel() {
 //        get() = _foodItemTemp
 
 
-    var _foodItemTempValue = MutableLiveData<List<FoodItem>?>()
+    private var _foodItemTempValue = MutableLiveData<List<FoodItem>?>()
     val foodItemTempValue: LiveData<List<FoodItem>?>
         get() = _foodItemTempValue
 
@@ -70,7 +70,7 @@ class AddMealViewModel(app: Application) : ViewModel() {
         getFoodItemRoomDB()
     }
 
-    val tempFoodItems = afyaRepository.foodItems
+//    val tempFoodItems = afyaRepository.foodItems
 
 
     //    lateinit var tempFoodItems:List<FoodItem?>

@@ -17,8 +17,7 @@
             android:id="@+id/food_imageView"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             app:foodImage="@{foodItem.image}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -29,61 +28,91 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            tools:text="Berry Blue"
-            app:generalName="@{foodItem.foodName}"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:textStyle="bold"
+            app:generalName="@{foodItem.brandName}"
+            app:layout_constraintEnd_toStartOf="@+id/no_calories"
             app:layout_constraintStart_toEndOf="@+id/food_imageView"
-            app:layout_constraintTop_toTopOf="@+id/food_imageView" />
+            app:layout_constraintTop_toTopOf="@+id/food_imageView"
+            tools:text="Berry Blue" />
 
         <TextView
             android:id="@+id/desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginTop="2dp"
             android:textSize="@dimen/_12sp"
-            app:generalName="@{foodItem.brandName}"
-            tools:text="Turn- E tummies"
-            app:layout_constraintStart_toStartOf="@+id/name"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
+            app:generalName="@{foodItem.foodName}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/no_servings"
+            tools:text="Turn- E tummies" />
 
         <TextView
             android:id="@+id/no_calories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:text="cal"
             android:textSize="@dimen/_14sp"
-            app:layout_constraintEnd_toStartOf="@+id/removeBtn"
+            app:layout_constraintEnd_toStartOf="@+id/textView4"
             app:layout_constraintTop_toTopOf="@+id/name" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             tools:text="67"
+            android:layout_marginEnd="8dp"
             app:generalName="@{foodItem.calories}"
-            android:textSize="@dimen/_12sp"
+            android:textSize="@dimen/_14sp"
             android:textColor="@color/colorRed"
-            app:layout_constraintStart_toStartOf="@+id/no_calories"
-            app:layout_constraintTop_toBottomOf="@+id/no_calories" />
+            app:layout_constraintEnd_toStartOf="@+id/removeBtn"
+            app:layout_constraintTop_toTopOf="@+id/name" />
+
+        <TextView
+            android:id="@+id/no_servings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Serving"
+            android:textSize="@dimen/_14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/servings"
+            app:layout_constraintEnd_toStartOf="@+id/servings"
+            app:layout_constraintTop_toBottomOf="@+id/name" />
+
+        <EditText
+            android:id="@+id/servings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2"
+            android:maxLength="4"
+            android:layout_marginEnd="8dp"
+            app:generalName="@{foodItem.servingQuantityString}"
+            android:textSize="@dimen/_14sp"
+            android:textColor="@color/colorRed"
+            app:layout_constraintEnd_toStartOf="@+id/removeBtn"
+            app:layout_constraintTop_toBottomOf="@+id/name" />
 
         <ImageView
             android:id="@+id/removeBtn"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_baseline_cancel_24"
-            app:layout_constraintBottom_toBottomOf="@+id/food_imageView"
+            android:padding="5dp"
+            android:src="@drawable/ic_baseline_check_24"
+            app:layout_constraintBottom_toBottomOf="@+id/servings"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/food_imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:tint="@color/design_default_color_primary" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorRed"
             android:layout_marginTop="@dimen/half_margin"
-            app:layout_constraintTop_toBottomOf="@+id/food_imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/desc" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

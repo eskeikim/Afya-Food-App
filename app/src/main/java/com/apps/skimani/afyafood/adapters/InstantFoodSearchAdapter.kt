@@ -15,17 +15,17 @@ import com.apps.skimani.afyafood.models.BrandedList
 class InstantFoodSearchAdapter(
     private val mContext: Context,
     private val mLayoutResourceId: Int,
-    departments: List<BrandedList>
+    brandList: List<BrandedList>
 ) :
-    ArrayAdapter<BrandedList>(mContext, mLayoutResourceId, departments) {
-    private val mDepartments: MutableList<BrandedList>
-    private val mDepartmentsAll: List<BrandedList>
+    ArrayAdapter<BrandedList>(mContext, mLayoutResourceId, brandList) {
+    private val brandedList: MutableList<BrandedList>
+    private val brandedListAll: List<BrandedList>
     override fun getCount(): Int {
-        return mDepartments.size
+        return brandedList.size
     }
 
     override fun getItem(position: Int): BrandedList {
-        return mDepartments[position]
+        return brandedList[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -39,9 +39,13 @@ class InstantFoodSearchAdapter(
                 val inflater = (mContext as Activity).layoutInflater
                 convertView = inflater.inflate(mLayoutResourceId, parent, false)
             }
-            val department: BrandedList = getItem(position)
+            val brand: BrandedList = getItem(position)
             val name = convertView!!.findViewById<View>(R.id.name) as TextView
-            name.setText(department.brandNameItemName)
+            val calories = convertView!!.findViewById<View>(R.id.calories) as TextView
+            val brandName = convertView!!.findViewById<View>(R.id.desc) as TextView
+            name.text = brand.brandNameItemName
+            calories.text = brand.nfCalories.toString()
+            brandName.text = brand.brandName
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -54,36 +58,36 @@ class InstantFoodSearchAdapter(
                 return (resultValue as BrandedList).brandNameItemName
             }
 
-            override fun performFiltering(constraint: CharSequence): FilterResults {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val filterResults = FilterResults()
-                val departmentsSuggestion: MutableList<BrandedList> = ArrayList()
+                val brandSuggestion: MutableList<BrandedList> = ArrayList()
                 if (constraint != null) {
-                    for (department in mDepartmentsAll) {
-                        if (department.brandNameItemName.toLowerCase()
+                    for (brand in brandedListAll) {
+                        if (brand.brandNameItemName.toLowerCase()
                                 .startsWith(constraint.toString().toLowerCase())
                         ) {
-                            departmentsSuggestion.add(department)
+                            brandSuggestion.add(brand)
                         }
                     }
-                    filterResults.values = departmentsSuggestion
-                    filterResults.count = departmentsSuggestion.size
+                    filterResults.values = brandSuggestion
+                    filterResults.count = brandSuggestion.size
                 }
                 return filterResults
             }
 
-            override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                mDepartments.clear()
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                brandedList.clear()
                 if (results != null && results.count > 0) {
                     // avoids unchecked cast warning when using mDepartments.addAll((ArrayList<Department>) results.values);
                     for (`object` in results.values as List<*>) {
                         if (`object` is BrandedList) {
-                            mDepartments.add(`object` as BrandedList)
+                            brandedList.add(`object` as BrandedList)
                         }
                     }
                     notifyDataSetChanged()
                 } else if (constraint == null) {
                     // no filter, add entire original list back in
-                    mDepartments.addAll(mDepartmentsAll)
+                    brandedList.addAll(brandedListAll)
                     notifyDataSetInvalidated()
                 }
             }
@@ -91,7 +95,7 @@ class InstantFoodSearchAdapter(
     }
 
     init {
-        mDepartments = ArrayList(departments)
-        mDepartmentsAll = ArrayList(departments)
+        brandedList = ArrayList(brandList)
+        brandedListAll = ArrayList(brandList)
     }
 }

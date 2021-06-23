@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.apps.skimani.afyafood.R
 import com.apps.skimani.afyafood.adapters.FoodItemAdpater
 import com.apps.skimani.afyafood.adapters.InstantFoodSearchAdapter
@@ -25,11 +26,16 @@ import kotlin.collections.ArrayList
 
 class AddMealFragment : Fragment() {
     private lateinit var namelist:ArrayList<String>
-    private  val brandedList=ArrayList<BrandedList>()
+    private lateinit var brandedList:ArrayList<BrandedList>
     private  val tempBrandedList=ArrayList<BrandedList>()
     private  val tempFoodItemList=ArrayList<FoodItem>()
     private lateinit var autoCompleteAdapter: ArrayAdapter<String>
     private lateinit var foodItem:List<FoodItem>
+    private lateinit var instantAdapter:InstantFoodSearchAdapter
+
+    /**
+     * Initialize the viewmodel by lazy
+     */
     private val addMealViewModel: AddMealViewModel by lazy {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onViewCreated()"
@@ -39,6 +45,10 @@ class AddMealFragment : Fragment() {
             AddMealViewModel.Factory(activity.application)
         ).get(AddMealViewModel::class.java)
     }
+
+    /**
+     * late initialization of the FragmentAddMeal Fragment
+     */
     private lateinit var binding: FragmentAddMealBinding
 
     override fun onCreateView(
@@ -47,6 +57,9 @@ class AddMealFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddMealBinding.inflate(layoutInflater)
+        /**
+         * Specify the viewmodel the layout will use to bind data from the viewmodel
+         */
         binding.viewModel=addMealViewModel
         binding.lifecycleOwner=this
         return binding.root
@@ -56,49 +69,84 @@ class AddMealFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         namelist=ArrayList<String>()
-        getData("car")
+//        getData("car")
+        initAutoComplete()
         setupObservers()
     }
 
+    /**
+     * Initialize views
+     *
+     */
     private fun initViews() {
+        binding.footItemRv.adapter=FoodItemAdpater(FoodItemAdpater.OnClickListener{
 
+        })
         binding.btnSave.setOnClickListener {
-            val mealName=binding.serving.text.toString()
+            val mealName=binding.mealName.text.toString()
             val serving=binding.serving.text.toString()
             val calories=binding.calories.text.toString()
             val time=binding.time.text.toString()
             val day=binding.day.text.toString()
 
+            /**
+             * Add validation before saving
+             */
             val meal=Meal(mealName,time,day,calories,serving)
+            /**
+             * Save a User custom meal to Room database
+             */
             addMealViewModel.saveAMealRoomDB(meal)
+            clearfields()
             Toast.makeText(requireContext(),"Meal inserted successfully",Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.navigation_home)
         }
     }
 
-    private fun getData(query:String) {
-//        addMealViewModel.getInstantItems(query)
+    private fun clearfields() {
+        binding.mealName.setText("")
+        binding.serving.setText("")
+        binding.calories.setText("")
+        binding.day.setText("")
+        binding.time.setText("")
     }
 
+    /**
+     * Send a network request to Nutritionix API to fetch instant search food items
+     *
+     * @param query
+     */
+    private fun getData(query:String) {
+        addMealViewModel.getInstantItems(query)
+    }
+
+    /**
+     * Observe livedata from the viemodel
+     *mealsearch-the livedata for autocomplete request
+     */
     private fun setupObservers() {
         addMealViewModel.mealsSearch.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is NetworkResult.Success -> {
-                    Timber.e("Success ${it.data}")
-                    val brandedList = it.data.branded
+                    Timber.e("Success search ${it.data}")
+                     brandedList.addAll(it.data.branded)
+                    instantAdapter.notifyDataSetChanged()
+                    binding.searchAutoComplete.showDropDown()
                     namelist.clear()
                     for (name in brandedList) {
                         namelist.add(name.brandName)
-                        Timber.d("Name ${name.brandName}")
+                        Timber.d("Names Search ${name.brandName}")
                     }
-
-//                    initViews(it)
+//                    initAutoComplete()
+//                    instantAdapter.notifyDataSetChanged()
                 }
                 is NetworkResult.Error -> {
+                    Toast.makeText(requireContext(),"Error Occurred, please try again!",Toast.LENGTH_LONG).show()
                     Timber.e( "Failed>>>>>>> ${it.exception.message}")
                 }
             }
         })
-        addMealViewModel.mealsSearchTest.observe(viewLifecycleOwner, Observer {
+       /* addMealViewModel.mealsSearchTest.observe(viewLifecycleOwner, Observer {
                     Timber.e( "Success ${it.size}")
                     namelist.clear()
 //                    for (name in brandedList) {
@@ -106,36 +154,32 @@ class AddMealFragment : Fragment() {
 //                        Timber.d("Name ${name.brandName}")
 //                    }
                     initAutoComplete(it)
-        })
-        binding.footItemRv.adapter=FoodItemAdpater(FoodItemAdpater.OnClickListener{
+        })*/
 
-        })
-        addMealViewModel.tempFoodItems.observe(viewLifecycleOwner, Observer {
-            if (it!=null) {
-                Timber.e("Item Success from ROOM ${it.size} ")
-                foodItem=it
-                for (item in it){
-                    Timber.d("Item Name ${item.foodName} >> ${item.calories}")
-
-                }
-            }
-        })
-
+//        addMealViewModel.tempFoodItems.observe(viewLifecycleOwner, Observer {
+//            if (it!=null) {
+//                Timber.e("Item Success from ROOM ${it.size} ")
+//                foodItem=it
+//                for (item in it){
+//                    Timber.d("Item Name ${item.foodName} >> ${item.calories}")
+//                }
+//            }
+//        })
     }
 
-    private fun initAutoComplete(list: List<BrandedList>) {
-        val mDepartmentList = Arrays.asList(list);
-        val instantAdapter=InstantFoodSearchAdapter(requireContext(),R.layout.instant_search_item_list,
-            list
+    /**
+     * Initialize autocomplete and get the searched query
+     *parse the query to nutritionix instant api
+     * @param list
+     */
+    private fun initAutoComplete() {
+        brandedList=ArrayList<BrandedList>()
+         instantAdapter=InstantFoodSearchAdapter(requireContext(),R.layout.instant_search_item_list,
+             brandedList
         )
-//        autoCompleteAdapter = ArrayAdapter<String>(
-//            requireContext(), R.layout.instant_search_item_list, R.id.name, namelist
-//        )
-//        binding.searchAutoComplete.setAdapter(autoCompleteAdapter)
         binding.searchAutoComplete.setAdapter(instantAdapter)
         binding.searchAutoComplete.threshold = 1
-//        instantAdapter.notifyDataSetChanged()
-//        autoCompleteAdapter.notifyDataSetChanged()
+        instantAdapter.notifyDataSetChanged()
         binding.searchAutoComplete.showDropDown()
         binding.searchAutoComplete.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -144,7 +188,9 @@ class AddMealFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 Timber.d("Text Search $s")
-//                    getData(s.toString())
+                if (s?.length!! >4) {
+                    getData(s.toString())
+                }
 
             }
 
@@ -156,13 +202,13 @@ class AddMealFragment : Fragment() {
         binding.searchAutoComplete.setOnItemClickListener{_, _, position, _ ->
             val selectedItem=instantAdapter.getItem(position)
             Timber.d("Selected Item $selectedItem")
-//            searchFoodItem(selectedItem.foodName)
             tempBrandedList.add(selectedItem)
-//            tempFoodItemList.add(
                 val foodItem=FoodItem(selectedItem.foodName,selectedItem.brandName,
                     selectedItem.nfCalories.toString(),selectedItem.servingQty.toString(),selectedItem.photo.thumb
             )
-//            )
+            /**
+             * Insert the selected food item to room database
+             */
              addMealViewModel.saveFoodItemRoomDB(foodItem)
             Timber.d("Selected Item $tempBrandedList")
 

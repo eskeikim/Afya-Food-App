@@ -18,7 +18,7 @@ class HomeViewModel(app: Application) : ViewModel() {
     private val database = getDatabase(app)
     private val afyaRepository = AfyaRepository(database)
 
-    var _allMeals = MutableLiveData<List<Meal>?>()
+    private var _allMeals = MutableLiveData<List<Meal>?>()
     val allMeals: LiveData<List<Meal>?>
         get() = _allMeals
 
@@ -26,11 +26,15 @@ class HomeViewModel(app: Application) : ViewModel() {
         getAllMeals()
     }
 
-
     fun getAllMeals() {
         uiScope.launch {
             val data = afyaRepository.fetchAllMeals()
-            Timber.d("ALL MEALS ${data}")
+            Timber.d("ALL MEALS ${data?.size}")
+            if (data != null) {
+                for (item in data){
+                    Timber.d("Item Name ${item.name} >> ${item.totalCalories}")
+                }
+            }
             _allMeals.postValue(data)
         }
     }
