@@ -43,9 +43,9 @@ class InstantFoodSearchAdapter(
             val name = convertView!!.findViewById<View>(R.id.name) as TextView
             val calories = convertView!!.findViewById<View>(R.id.calories) as TextView
             val brandName = convertView!!.findViewById<View>(R.id.desc) as TextView
-            name.text = brand.brandNameItemName
+            brandName.text = brand.brandNameItemName
             calories.text = brand.nfCalories.toString()
-            brandName.text = brand.brandName
+            name.text = brand.brandName
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,9 +21,11 @@ import com.apps.skimani.afyafood.database.Meal
 import com.apps.skimani.afyafood.databinding.FragmentAddMealBinding
 import com.apps.skimani.afyafood.models.BrandedList
 import com.apps.skimani.foodie.utils.NetworkResult
+import com.google.android.material.chip.Chip
 import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class AddMealFragment : Fragment() {
     private lateinit var namelist:ArrayList<String>
@@ -32,7 +35,7 @@ class AddMealFragment : Fragment() {
     private lateinit var autoCompleteAdapter: ArrayAdapter<String>
     private lateinit var foodItem:List<FoodItem>
     private lateinit var instantAdapter:InstantFoodSearchAdapter
-
+private lateinit var foodItemAdapter: FoodItemAdpater
     /**
      * Initialize the viewmodel by lazy
      */
@@ -69,6 +72,7 @@ class AddMealFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         namelist=ArrayList<String>()
+        brandedList=ArrayList<BrandedList>()
 //        getData("car")
         initAutoComplete()
         setupObservers()
@@ -79,26 +83,39 @@ class AddMealFragment : Fragment() {
      *
      */
     private fun initViews() {
-        binding.footItemRv.adapter=FoodItemAdpater(FoodItemAdpater.OnClickListener{
+          foodItemAdapter=FoodItemAdpater(FoodItemAdpater.OnClickListener {
 
         })
+        binding.footItemRv.adapter=foodItemAdapter
         binding.btnSave.setOnClickListener {
             val mealName=binding.mealName.text.toString()
             val serving=binding.serving.text.toString()
             val calories=binding.calories.text.toString()
-            val time=binding.time.text.toString()
-            val day=binding.day.text.toString()
-
+//            val time=binding.time.text.toString()
+            val time=""
+            var day=""
+            binding.dayChipGroup.setOnCheckedChangeListener { group, checkedId ->
+                val chip: Chip? = group.findViewById(checkedId)
+                chip?.let {
+                    Toast.makeText(chip.context, chip.text.toString(), Toast.LENGTH_SHORT).show()
+                    Timber.d("${chip.text} ${chip.tag}")
+                    day=chip.text.toString()
+                }
+                if (checkedId==R.id.todayChip){
+                    Timber.e("${chip?.text} ${chip?.tag}")
+                    Toast.makeText(chip?.context, chip?.text.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
             /**
              * Add validation before saving
              */
-            val meal=Meal(mealName,time,day,calories,serving)
+            val meal=Meal(mealName, time, day, calories, serving)
             /**
              * Save a User custom meal to Room database
              */
             addMealViewModel.saveAMealRoomDB(meal)
             clearfields()
-            Toast.makeText(requireContext(),"Meal inserted successfully",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Meal inserted successfully", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.navigation_home)
         }
     }
@@ -111,8 +128,8 @@ class AddMealFragment : Fragment() {
         binding.mealName.setText("")
         binding.serving.setText("")
         binding.calories.setText("")
-        binding.day.setText("")
-        binding.time.setText("")
+//        binding.day.setText("")
+//        binding.time.setText("")
     }
 
     /**
@@ -120,7 +137,7 @@ class AddMealFragment : Fragment() {
      *
      * @param query
      */
-    private fun getData(query:String) {
+    private fun getData(query: String) {
         addMealViewModel.getInstantItems(query)
     }
 
@@ -133,7 +150,7 @@ class AddMealFragment : Fragment() {
             when (it) {
                 is NetworkResult.Success -> {
                     Timber.e("Success search ${it.data}")
-                     brandedList.addAll(it.data.branded)
+                    brandedList.addAll(it.data.branded)
                     instantAdapter.notifyDataSetChanged()
                     binding.searchAutoComplete.showDropDown()
                     namelist.clear()
@@ -141,33 +158,27 @@ class AddMealFragment : Fragment() {
                         namelist.add(name.brandName)
                         Timber.d("Names Search ${name.brandName}")
                     }
-//                    initAutoComplete()
-//                    instantAdapter.notifyDataSetChanged()
+                    initAutoComplete()
+                    instantAdapter.notifyDataSetChanged()
                 }
                 is NetworkResult.Error -> {
-                    Toast.makeText(requireContext(),"Error Occurred, please try again!",Toast.LENGTH_LONG).show()
-                    Timber.e( "Failed>>>>>>> ${it.exception.message}")
+                    Toast.makeText(
+                        requireContext(),
+                        "Error Occurred, please try again!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    Timber.e("Failed>>>>>>> ${it.exception.message}")
                 }
             }
         })
-       /* addMealViewModel.mealsSearchTest.observe(viewLifecycleOwner, Observer {
-                    Timber.e( "Success ${it.size}")
-                    namelist.clear()
-//                    for (name in brandedList) {
-//                        namelist.add(name.brandName)
-//                        Timber.d("Name ${name.brandName}")
-//                    }
-                    initAutoComplete(it)
-        })*/
-
-//        addMealViewModel.tempFoodItems.observe(viewLifecycleOwner, Observer {
-//            if (it!=null) {
-//                Timber.e("Item Success from ROOM ${it.size} ")
-//                foodItem=it
-//                for (item in it){
-//                    Timber.d("Item Name ${item.foodName} >> ${item.calories}")
-//                }
-//            }
+//        addMealViewModel.mealsSearchTest.observe(viewLifecycleOwner, Observer {
+//                    Timber.e( "Success ${it.size}")
+//                    namelist.clear()
+////                    for (name in brandedList) {
+////                        namelist.add(name.brandName)
+////                        Timber.d("Name ${name.brandName}")
+////                    }
+//                    initAutoComplete()
 //        })
     }
 
@@ -177,10 +188,11 @@ class AddMealFragment : Fragment() {
      * @param list
      */
     private fun initAutoComplete() {
-        brandedList=ArrayList<BrandedList>()
-         instantAdapter=InstantFoodSearchAdapter(requireContext(),R.layout.instant_search_item_list,
+         instantAdapter=InstantFoodSearchAdapter(
+             requireContext(), R.layout.instant_search_item_list,
              brandedList
-        )
+         )
+
         binding.searchAutoComplete.setAdapter(instantAdapter)
         binding.searchAutoComplete.threshold = 1
         instantAdapter.notifyDataSetChanged()
@@ -192,7 +204,7 @@ class AddMealFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 Timber.d("Text Search $s")
-                if (s?.length!! >4) {
+                if (s?.length!! > 4) {
                     getData(s.toString())
                 }
 
@@ -203,24 +215,28 @@ class AddMealFragment : Fragment() {
             }
 
         })
-        binding.searchAutoComplete.setOnItemClickListener{_, _, position, _ ->
+        binding.searchAutoComplete.setOnItemClickListener{ _, _, position, _ ->
             val selectedItem=instantAdapter.getItem(position)
             Timber.d("Selected Item $selectedItem")
             tempBrandedList.add(selectedItem)
-                val foodItem=FoodItem(selectedItem.foodName,selectedItem.brandName,
-                    selectedItem.nfCalories.toString(),selectedItem.servingQty.toString(),selectedItem.photo.thumb
-            )
+                val foodItem=FoodItem(
+                    selectedItem.foodName,
+                    selectedItem.brandName,
+                    selectedItem.nfCalories.toString(),
+                    selectedItem.servingQty.toString(),
+                    selectedItem.photo.thumb
+                )
             /**
              * Insert the selected food item to room database
              */
              addMealViewModel.saveFoodItemRoomDB(foodItem)
             Timber.d("Selected Item $tempBrandedList")
-
-
+            addMealViewModel.getFoodItemRoomDB()
         }
     }
 
     private fun searchFoodItem(selectedItem: String?) {
         addMealViewModel.getFoodItems(selectedItem!!)
     }
+
 }

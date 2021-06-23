@@ -1,5 +1,6 @@
 package com.apps.skimani.afyafood.utils
 
+import android.content.Context
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -32,8 +33,8 @@ import org.json.JSONObject
             }
 
 
-            private const val PREFS_NAME = "afyaFood
-             const val PREFS_CALORIES_LIMIT = "calories_limit
+            private const val PREFS_NAME = "afyaFood"
+             const val PREFS_CALORIES_LIMIT = "calories_limit"
 
             /*** set shared preferences
              *  * @param con

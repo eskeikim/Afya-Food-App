@@ -16,10 +16,9 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_baseline_food_bank_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_baseline_food_bank_24" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/name"
@@ -37,41 +36,42 @@
             android:id="@+id/desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            tools:text="Turn- E tummies"
             android:textSize="@dimen/_12sp"
-            app:layout_constraintEnd_toEndOf="@+id/name"
-            app:layout_constraintStart_toStartOf="@+id/name"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/food_imageView"
+            tools:text="Turn- E tummies" />
 
         <TextView
             android:id="@+id/no_calories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:text="Cal"
             android:textSize="@dimen/_14sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/calories"
             app:layout_constraintTop_toTopOf="@+id/name" />
 
         <TextView
             android:id="@+id/calories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            tools:text="67"
+            android:layout_marginEnd="28dp"
             android:textColor="@color/colorRed"
             android:textSize="@dimen/_14sp"
-            app:layout_constraintEnd_toEndOf="@+id/no_calories"
-            app:layout_constraintStart_toStartOf="@+id/no_calories"
-            app:layout_constraintTop_toBottomOf="@+id/no_calories" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/name"
+            tools:text="67" />
 
         <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="1dp"
             android:background="@color/colorRed"
-            android:layout_marginTop="@dimen/half_margin"
-            app:layout_constraintTop_toBottomOf="@+id/food_imageView" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/desc" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
