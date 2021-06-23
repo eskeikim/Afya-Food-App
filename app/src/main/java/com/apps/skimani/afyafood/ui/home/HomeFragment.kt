@@ -32,6 +32,11 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(layoutInflater)
+        /**
+         * Specify the viewmodel the layout will use to bind data from the viewmodel
+         */
+        binding.viewwModel=homeViewModel
+        binding.lifecycleOwner=this
         return binding.root
     }
 

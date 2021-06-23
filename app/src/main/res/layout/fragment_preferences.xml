@@ -4,19 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.preference.PreferenceFragment">
+    >
 
     <TextView
         android:id="@+id/text_notifications"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
         android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="@dimen/_14sp"
+        android:text="Specify the daily target number of calories"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiAmount"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        app:layout_constraintTop_toBottomOf="@+id/text_notifications"
+        app:prefixTextAppearance="@style/TextAppearance.AppCompat.Title"
+        android:hint="Enter Daily Number Calories">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/numberOfCalories"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:inputType="number"
+            tools:layout_editor_absoluteX="24dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

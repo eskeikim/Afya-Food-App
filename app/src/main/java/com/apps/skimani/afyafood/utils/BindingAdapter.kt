@@ -11,6 +11,7 @@ import com.apps.skimani.afyafood.database.FoodItem
 import com.apps.skimani.afyafood.database.Meal
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.chip.Chip
 
 
 @BindingAdapter("listFoodtems")
@@ -44,3 +45,10 @@ fun bindName(nameTv: TextView, nameString: String?) {
         nameTv.text = nameString
     }
 }
+@BindingAdapter("chipName")
+fun bindChipName(nameTv: Chip, nameString: String?) {
+    nameString?.let {
+        nameTv.text = nameString
+    }
+}
+

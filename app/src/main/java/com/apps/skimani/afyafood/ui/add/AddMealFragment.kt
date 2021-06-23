@@ -103,6 +103,10 @@ class AddMealFragment : Fragment() {
         }
     }
 
+    /**
+     * Clear the input fields
+     *
+     */
     private fun clearfields() {
         binding.mealName.setText("")
         binding.serving.setText("")

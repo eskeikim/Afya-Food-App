@@ -30,5 +30,33 @@ import org.json.JSONObject
             fun getRequestBody(requestJson: JSONObject): RequestBody {
                 return requestJson.toString().toRequestBody("application/json".toMediaTypeOrNull())
             }
+
+
+            private const val PREFS_NAME = "afyaFood
+             const val PREFS_CALORIES_LIMIT = "calories_limit
+
+            /*** set shared preferences
+             *  * @param con
+             * @param key
+             * @return
+             */
+            fun setPreference(con: Context, key: String?, value: String?) {
+                val preferences = con.getSharedPreferences(PREFS_NAME, 0)
+                val editor = preferences.edit()
+                editor.putString(key, value)
+                editor.apply()
+            }
+
+            /** get shared preferences
+             * @param con
+             * @param key
+             * @return
+             */
+            fun getPreferences(con: Context, key: String?): String? {
+                val sharedPreferences = con.getSharedPreferences(PREFS_NAME, 0)
+                return sharedPreferences.getString(key, null)
+            }
+
+
         }
     }

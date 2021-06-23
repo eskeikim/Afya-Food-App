@@ -79,6 +79,44 @@
                     android:layout_height="60dp"
                     android:inputType="textCapWords" />
             </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/half_margin"
+                android:layout_marginStart="@dimen/half_margin"
+                android:layout_marginEnd="@dimen/half_margin"
+                app:checkedChip="@+id/breakfastChip"
+                app:singleSelection="true"
+                >
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/breakfastChip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="BREAKFAST"/>
+
+                <com.google.android.material.chip.Chip
+                android:id="@+id/lunchChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="LUNCH"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                android:id="@+id/dinnerChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="DINNER"/>
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                android:id="@+id/dissertChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="DISSERT"/>
+
+            </com.google.android.material.chip.ChipGroup>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tiTime"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
