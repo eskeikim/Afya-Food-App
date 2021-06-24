@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(entities = [FoodItem::class,Meal::class], version = 1)
+//@TypeConverters(OtherServicesTypeConverter::class)
 abstract class AfyaDb : RoomDatabase() {
     abstract val foodItem: FoodItemDao
 }

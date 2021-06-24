@@ -6,4 +6,5 @@
     <string name="add_meal">Add Meal</string>
     <string name="my_meals">My Meals</string>
     <string name="preferences">Preferences</string>
+    <string name="scan_err">Failed to scan</string>
 </resources>

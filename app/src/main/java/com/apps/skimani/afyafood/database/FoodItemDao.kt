@@ -17,6 +17,9 @@ interface FoodItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveMeal(vararg meal: Meal)
 
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    fun saveMealAndFood(vararg meal: MealAndFood)
+
     @Query("select * from Meal")
     suspend fun getAllMeals(): List<Meal>?
 
@@ -25,6 +28,10 @@ interface FoodItemDao {
 
     @Query("DELETE from fooditem where id in (:foodItem)")
     suspend fun deleteFoodItem(foodItem: ArrayList<Int>):Int
+
+//    @Transaction
+//    @Query("SELECT * FROM meal")
+//    fun getMealWithFoodItems():List<MealAndFood>
 
 
 }

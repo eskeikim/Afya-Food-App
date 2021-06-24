@@ -1,6 +1,7 @@
 package com.apps.skimani.afyafood.ui.add
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,6 +22,7 @@ import com.apps.skimani.afyafood.database.FoodItem
 import com.apps.skimani.afyafood.database.Meal
 import com.apps.skimani.afyafood.databinding.FragmentAddMealBinding
 import com.apps.skimani.afyafood.models.BrandedList
+import com.apps.skimani.afyafood.utils.ScannerActivity
 import com.apps.skimani.afyafood.utils.Utils
 import com.apps.skimani.foodie.utils.NetworkResult
 import com.google.android.material.chip.Chip
@@ -28,6 +30,7 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class AddMealFragment : Fragment() {
@@ -43,6 +46,7 @@ private lateinit var foodItemAdapter: FoodItemAdpater
     private lateinit var selectedChipTag: String
     private lateinit var selectedTimeChipTag: String
     private var isCustomDate: Boolean=false
+    private val SCAN_SERIAL_REQUEST=920
 
     /**
      * Initialize the viewmodel by lazy
@@ -98,8 +102,12 @@ private lateinit var foodItemAdapter: FoodItemAdpater
           })
         binding.footItemRv.adapter=foodItemAdapter
 
+        binding.scan.setOnClickListener {
+            val intent = Intent(requireContext(), ScannerActivity::class.java)
+            startActivityForResult(intent, SCAN_SERIAL_REQUEST)
+        }
         binding.dateChip.setOnClickListener {
-            Utils.pickDate(requireContext(),binding.dateChip)
+            Utils.pickDate(requireContext(), binding.dateChip)
         }
         binding.btnSave.setOnClickListener {
             val mealName=binding.mealName.text.toString()
@@ -121,7 +129,11 @@ private lateinit var foodItemAdapter: FoodItemAdpater
              */
             when {
                 foodItemList.isEmpty() -> {
-                    Toast.makeText(requireContext(), "Add food items before logging this meal", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Add food items before logging this meal",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 mealName.isEmpty() -> {
                     binding.tiMealName.error="Enter valid name"
@@ -133,7 +145,15 @@ private lateinit var foodItemAdapter: FoodItemAdpater
                     binding.tiCalories.error="Enter valid calories number"
                 }
                 else -> {
-                    val meal = Meal(mealName, selectedTimeChipTag, selectedChipTag, calories, serving)
+                    val foodArrayL=HashMap<String, List<FoodItem>>()
+                    foodArrayL.put("", foodItemList)
+                    val meal = Meal(
+                        mealName,
+                        selectedTimeChipTag,
+                        selectedChipTag,
+                        calories,
+                        serving
+                    )
                     /**
                      * Save a User custom meal to Room database
                      */
@@ -144,7 +164,11 @@ private lateinit var foodItemAdapter: FoodItemAdpater
                      * delete a User temp food item for this meal from Room database
                      */
                     addMealViewModel.deleteFoodItem(tempFoodItemIdList)
-                    Toast.makeText(requireContext(), "Meal size ${meal.name} Inserted successfully", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Meal size ${meal.name} Inserted successfully",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                     findNavController().navigate(R.id.navigation_home)
                 }
@@ -202,8 +226,12 @@ private lateinit var foodItemAdapter: FoodItemAdpater
          * show result after Clearing the food item after inserting meal observer
          */
         addMealViewModel.deleteFoodStatus.observe(viewLifecycleOwner, Observer {
-            if (it!=null && it>0){
-                Toast.makeText(requireContext(),"Successfully cleared food items",Toast.LENGTH_SHORT).show()
+            if (it != null && it > 0) {
+                Toast.makeText(
+                    requireContext(),
+                    "Successfully cleared food items",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
 
@@ -233,8 +261,8 @@ private lateinit var foodItemAdapter: FoodItemAdpater
             }
         })
         addMealViewModel.foodItemTempValue.observe(viewLifecycleOwner, Observer {
-                    Timber.e( "Success ${it?.size}")
-            foodItemList=it!!
+            Timber.e("Success ${it?.size}")
+            foodItemList = it!!
             getById()
         })
     }

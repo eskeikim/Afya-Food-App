@@ -14,9 +14,16 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:orientation="vertical">
+         <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+             android:weightSum="5"
+        android:orientation="horizontal">
+
         <AutoCompleteTextView
             android:id="@+id/searchAutoComplete"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="4"
             android:layout_height="@dimen/_55dp"
             android:layout_marginStart="@dimen/half_margin"
             android:layout_marginTop="@dimen/half_margin"
@@ -25,7 +32,15 @@
             android:background="@drawable/rounded_gray_bg"
             android:dropDownSelector="@color/purple_200"
             android:hint="Search food items eg. potatoes" />
-
+        <ImageView
+            android:id="@+id/scan"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_barcode"
+            />
+         </LinearLayout>
         <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

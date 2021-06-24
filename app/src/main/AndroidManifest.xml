@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.apps.skimani.afyafood">
 <uses-permission android:name="android.permission.INTERNET"/>
-
+<uses-permission android:name="android.permission.CAMERA"/>
     <application
         android:name=".AfyaApp"
         android:allowBackup="true"
@@ -20,6 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".utils.ScannerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeTransparent"/>
     </application>
 
 </manifest>

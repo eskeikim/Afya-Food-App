@@ -23,4 +23,11 @@
         <item name="android:textStyle">bold</item>
         <item name="cornerRadius">@dimen/material_button_conner_radius</item>
     </style>
+    <style name="AppThemeTransparent" parent="@style/Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 </resources>
