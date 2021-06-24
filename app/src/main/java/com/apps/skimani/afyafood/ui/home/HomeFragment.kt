@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.apps.skimani.afyafood.R
 import com.apps.skimani.afyafood.adapters.FoodItemAdpater
 import com.apps.skimani.afyafood.adapters.MealsAdapter
@@ -61,16 +62,19 @@ class HomeFragment : Fragment() {
         val adapter = MealsAdapter(MealsAdapter.OnClickListener {
 
         })
+        binding.dailyCalories.setOnClickListener {
+            findNavController().navigate(R.id.navigation_dashboard)
+        }
         binding.mealsRv.adapter = adapter
         selectedChipTag = Utils.getAnyDay(0, true)
         binding.todayChip.tag = (Utils.getAnyDay(0, true))
-        binding.yesterdayChip.text = (Utils.getAnyDay(-1, false))
+        binding.yesterdayChip.text = "Yesterday"
         binding.yesterdayChip.tag = (Utils.getAnyDay(-1, true))
         binding.juzi2Chip.tag = (Utils.getAnyDay(-3, true))
         binding.juzi2Chip.text = (Utils.getAnyDay(-3, false))
         binding.juziChip.tag = (Utils.getAnyDay(-2, true))
         binding.juziChip.text = (Utils.getAnyDay(-2, false))
-
+       fetchMeals(false)
         binding.todayChip.setOnClickListener {
 
             fetchMeals(false)
@@ -104,7 +108,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchMealsFromRoomDB(query: String) {
-
+       homeViewModel.getMealsByDay(query)
     }
 
     private fun chooseDate() {
@@ -139,6 +143,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupObservers() {
+        homeViewModel.dailyCaloriesLimit.observe(viewLifecycleOwner, Observer {
+            if (it!="0"){
+                val limit=it.toString().toInt()
+                val totalConsumedCal=900
+                val remaining=totalConsumedCal-limit
+            binding.dailyCalories.text = "Daily Calories limit :$it"
+            binding.calories.text = " Remaining today :$remaining"
+            }else{
+                binding.dailyCalories.text = "Kindly set your Daily Calories limit"
+            }
+        })
         homeViewModel.allMeals.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 Timber.e("Meals Success from ROOM ${it.size}")

@@ -62,7 +62,7 @@ class Utils {
          */
         fun getPreferences(con: Context, key: String?): String? {
             val sharedPreferences = con.getSharedPreferences(PREFS_NAME, 0)
-            return sharedPreferences.getString(key, null)
+            return sharedPreferences.getString(key, "0")
         }
 
 

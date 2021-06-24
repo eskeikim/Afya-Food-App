@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.apps.skimani.afyafood.database.Meal
 import com.apps.skimani.afyafood.database.getDatabase
 import com.apps.skimani.afyafood.repository.AfyaRepository
+import com.apps.skimani.afyafood.utils.Utils
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -21,9 +22,22 @@ class HomeViewModel(app: Application) : ViewModel() {
     private var _allMeals = MutableLiveData<List<Meal>?>()
     val allMeals: LiveData<List<Meal>?>
         get() = _allMeals
+    private var _isEmpty = MutableLiveData<Boolean>()
+    val isEmpty: LiveData<Boolean>
+        get() = _isEmpty
+
+    private var _mealsByDay = MutableLiveData<List<Meal>?>()
+    val mealsByDay: LiveData<List<Meal>?>
+        get() = _mealsByDay
+
+    private val _dailyCaloriesLimit = MutableLiveData<String>()
+    val dailyCaloriesLimit: LiveData<String>
+        get() = _dailyCaloriesLimit
 
     init {
-        getAllMeals()
+        _dailyCaloriesLimit.value= Utils.getPreferences(app.applicationContext, Utils.PREFS_CALORIES_LIMIT)
+        _isEmpty.value=false
+//        getAllMeals()
     }
 
     fun getAllMeals() {
@@ -36,6 +50,24 @@ class HomeViewModel(app: Application) : ViewModel() {
                 }
             }
             _allMeals.postValue(data)
+        }
+    }
+    fun getMealsByDay(query:String) {
+        uiScope.launch {
+            val data = afyaRepository.fetchMealsByDay(query)
+            Timber.d("DAY MEALS ${data?.size}")
+            if (data?.size!! >0){
+                _mealsByDay.postValue(data)
+                _isEmpty.postValue(false)
+
+                if (data != null) {
+                for (item in data) {
+                    Timber.d("Item Name ${item.name} >> ${item.totalCalories}")
+                }
+            }
+            }else{
+             _isEmpty.postValue(true)
+            }
         }
     }
 

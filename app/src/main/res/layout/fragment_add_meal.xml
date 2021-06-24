@@ -30,9 +30,10 @@
                 android:layout_height="@dimen/_55dp"
                 android:layout_marginStart="@dimen/normal_margin"
                 android:layout_marginEnd="@dimen/normal_margin"
+                android:padding="@dimen/normal_margin"
                 android:background="@drawable/rounded_gray_bg"
                 android:dropDownSelector="@color/purple_200"
-                android:hint="Search food items eg. 2 cups of rice" />
+                android:hint="Search food items eg. potatoes" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/footItemRv"
@@ -119,7 +120,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TODAY"
+                    android:text="Today"
                     android:tag="24/06/2021"
                     android:textSize="@dimen/_12sp"
                     app:checkedIconVisible="true" />
@@ -158,7 +159,8 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="BREAKFAST"
+                    android:text="Breakfast"
+                    android:tag="Breakfast"
                     android:textSize="@dimen/_12sp"
                     app:checkedIconVisible="true" />
 
@@ -167,7 +169,8 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="LUNCH"
+                    android:text="Lunch"
+                    android:tag="Lunch"
                     android:textSize="@dimen/_12sp"
                     app:checkedIconVisible="true" />
 
@@ -176,7 +179,8 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DINNER"
+                    android:text="Dinner"
+                    android:tag="Dinner"
                     android:textSize="@dimen/_12sp"
                     app:checkedIconVisible="true" />
 
@@ -185,7 +189,8 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DISSERT"
+                    android:text="Dissert"
+                    android:tag="Dissert"
                     android:textSize="@dimen/_12sp"
                     app:checkedIconVisible="true" />
             </com.google.android.material.chip.ChipGroup>

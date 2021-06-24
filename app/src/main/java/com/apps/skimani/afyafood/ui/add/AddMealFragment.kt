@@ -1,5 +1,6 @@
 package com.apps.skimani.afyafood.ui.add
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.DatePicker
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,6 +29,7 @@ import com.apps.skimani.foodie.utils.NetworkResult
 import com.bumptech.glide.util.Util
 import com.google.android.material.chip.Chip
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -39,6 +43,10 @@ class AddMealFragment : Fragment() {
     private lateinit var foodItem:List<FoodItem>
     private lateinit var instantAdapter:InstantFoodSearchAdapter
 private lateinit var foodItemAdapter: FoodItemAdpater
+    private lateinit var selectedChipTag: String
+    private lateinit var selectedTimeChipTag: String
+    private var isCustomDate: Boolean=false
+
     /**
      * Initialize the viewmodel by lazy
      */
@@ -86,6 +94,7 @@ private lateinit var foodItemAdapter: FoodItemAdpater
      *
      */
     private fun initViews() {
+        initChipsView()
           foodItemAdapter=FoodItemAdpater(FoodItemAdpater.OnClickListener {
 
           })
@@ -102,12 +111,21 @@ private lateinit var foodItemAdapter: FoodItemAdpater
             val time=""
             var day=""
 
-            val selectedChipText = binding.dayChipGroup.findViewById<Chip>(binding.dayChipGroup.checkedChipId).text.toString()
-            val selectedChipTag = binding.dayChipGroup.findViewById<Chip>(binding.dayChipGroup.checkedChipId).tag.toString()
+//            val selectedChipText = binding.dayChipGroup.findViewById<Chip>(binding.dayChipGroup.checkedChipId).text.toString()
+//            val selectedChipTag = binding.dayChipGroup.findViewById<Chip>(binding.dayChipGroup.checkedChipId).tag.toString()
 
+            selectedTimeChipTag="Breakfast"
+
+            selectedTimeChipTag=binding.timeChipGroup.findViewById<Chip>(binding.timeChipGroup.checkedChipId).tag.toString()
+
+            if (!isCustomDate){
+                selectedChipTag =
+                    binding.dayChipGroup.findViewById<Chip>(binding.dayChipGroup.checkedChipId).tag.toString()
+                Timber.d("Selected query $selectedChipTag")
+            }
             println("CHECKED CHIPS" )
-            Log.e("CHECKED CHIPS", selectedChipText.toString() )
-            Timber.e("CHECKED CHIPS TEXT $selectedChipText ")
+            Log.e("CHECKED CHIPS", selectedChipTag.toString() )
+            Timber.e("CHECKED CHIPS TEXT $selectedChipTag ")
             Timber.e("CHECKED CHIPS TAG $selectedChipTag ")
             Timber.e("CHECKED CHIPS  cs")
 
@@ -115,15 +133,35 @@ private lateinit var foodItemAdapter: FoodItemAdpater
             /**
              * Add validation before saving
              */
-            val meal=Meal(mealName, time, day, calories, serving)
+            val meal=Meal(mealName, selectedTimeChipTag, selectedChipTag, calories, serving)
             /**
              * Save a User custom meal to Room database
              */
-//            addMealViewModel.saveAMealRoomDB(meal)
-//            clearfields()
+            addMealViewModel.saveAMealRoomDB(meal)
+            clearfields()
             Toast.makeText(requireContext(), "Meal inserted successfully", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.navigation_home)
         }
+    }
+
+    private fun initChipsView() {
+        selectedChipTag = Utils.getAnyDay(0, true)
+        binding.todayChip.tag = (Utils.getAnyDay(0, true))
+        binding.yesterdayChip.text = "Yesterday"
+        binding.yesterdayChip.tag = (Utils.getAnyDay(-1, true))
+        binding.juzi2Chip.tag = (Utils.getAnyDay(-3, true))
+        binding.juzi2Chip.text = (Utils.getAnyDay(-3, false))
+        binding.juziChip.tag = (Utils.getAnyDay(-2, true))
+        binding.juziChip.text = (Utils.getAnyDay(-2, false))
+
+        binding.dayChipGroup.setOnCheckedChangeListener { group, checkedId ->
+            isCustomDate = !(checkedId==R.id.todayChip || checkedId==R.id.yesterdayChip ||
+                    checkedId==R.id.juzi2Chip || checkedId==R.id.juziChip)
+
+        binding.dateChip.setOnClickListener {
+            chooseDate()
+        }
+    }
     }
 
     /**
@@ -244,5 +282,34 @@ private lateinit var foodItemAdapter: FoodItemAdpater
     private fun searchFoodItem(selectedItem: String?) {
         addMealViewModel.getFoodItems(selectedItem!!)
     }
+private fun chooseDate() {
+    val dateListener: DatePickerDialog.OnDateSetListener
+    val myCalendar = Calendar.getInstance()
+    val currYear = myCalendar[Calendar.YEAR]
+    val currMonth = myCalendar[Calendar.MONTH]
+    val currDay = myCalendar[Calendar.DAY_OF_MONTH]
+    dateListener =
+        DatePickerDialog.OnDateSetListener { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+            myCalendar[Calendar.YEAR] = year
+            myCalendar[Calendar.MONTH] = monthOfYear
+            myCalendar[Calendar.DAY_OF_MONTH] = dayOfMonth
+            var isDateOk = true
+
+            val preferredFormat = "dd/MM/yyyy"
+            val date =
+                SimpleDateFormat(preferredFormat, Locale.ENGLISH).format(myCalendar.time)
+            binding.dateChip.tag = Utils.formatRequestTag(date)
+            val textString = Utils.formatRequestDate(date)
+            binding.dateChip.text = textString
+            selectedChipTag = Utils.formatRequestTag(date)
+            Timber.e("DATEE $date ...${Utils.formatRequestTag(date)} ..SEL TAG $selectedChipTag")
+
+        }
+    DatePickerDialog(
+        requireContext(), dateListener, myCalendar[Calendar.YEAR],
+        myCalendar[Calendar.MONTH],
+        myCalendar[Calendar.DAY_OF_MONTH]
+    ).show()
+}
 
 }

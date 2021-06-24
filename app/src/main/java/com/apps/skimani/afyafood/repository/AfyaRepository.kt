@@ -91,6 +91,11 @@ class AfyaRepository(private val database: AfyaDb) {
             database.foodItem.getAllMeals()
         }
     }
+    suspend fun fetchMealsByDay(query: String): List<Meal>? {
+        return withContext(Dispatchers.IO) {
+            database.foodItem.getMealsByDay(query)
+        }
+    }
 
     /**
      * Store the food items temporarily in the offline cache.

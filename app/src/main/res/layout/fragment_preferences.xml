@@ -1,44 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/text_notifications"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/normal_margin"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:layout_marginEnd="@dimen/normal_margin"
-        android:textAlignment="center"
-        android:textSize="@dimen/_14sp"
-        android:text="Specify the daily target number of calories"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tiAmount"
+    <data>
 
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/normal_margin"
-        android:layout_marginEnd="@dimen/normal_margin"
-        android:layout_marginTop="@dimen/normal_margin"
-        app:layout_constraintTop_toBottomOf="@+id/text_notifications"
-        app:prefixTextAppearance="@style/TextAppearance.AppCompat.Title"
-        android:hint="Enter Daily Number Calories">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/numberOfCalories"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text_notifications"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:inputType="number"
-            tools:layout_editor_absoluteX="24dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginTop="@dimen/normal_margin"
+            android:layout_marginEnd="@dimen/normal_margin"
+            android:textAlignment="center"
+            android:textSize="@dimen/_14sp"
+            android:text="Specify the daily target number of calories"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tiNumberOfCalories"
+style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginEnd="@dimen/normal_margin"
+            android:layout_marginTop="@dimen/normal_margin"
+            app:layout_constraintTop_toBottomOf="@+id/text_notifications"
+            app:prefixTextAppearance="@style/TextAppearance.AppCompat.Title"
+            android:hint="Enter Daily Number Calories">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/numberOfCalories"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:inputType="number"
+                tools:layout_editor_absoluteX="24dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/btnSave"
+            style="@style/MaterialButtonAddMeal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/tiNumberOfCalories"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginTop="@dimen/normal_margin"
+            android:layout_marginEnd="@dimen/normal_margin"
+            android:text="Save"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

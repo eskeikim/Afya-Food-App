@@ -23,4 +23,8 @@ interface FoodItemDao {
     @Query("select * from Meal")
     suspend fun getAllMeals(): List<Meal>?
 
+    @Query("select * from Meal WHERE day=:dayQuery")
+    suspend fun getMealsByDay(dayQuery:String): List<Meal>?
+
+
 }

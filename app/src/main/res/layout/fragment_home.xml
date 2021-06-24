@@ -16,12 +16,12 @@
         tools:context=".ui.home.HomeFragment">
 
         <TextView
-            android:id="@+id/tv_calories"
+            android:id="@+id/daily_calories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/normal_margin"
             android:textSize="14sp"
-            android:text="Calories Remaining today"
+            tools:text="Daily Calories Limt 100"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,12 +29,13 @@
             android:id="@+id/calories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20 cal"
+            tools:text="Calories Remaining today 90"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginStart="@dimen/half_margin"
-            app:layout_constraintStart_toEndOf="@+id/tv_calories"
+            app:layout_constraintStart_toEndOf="@+id/daily_calories"
             app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/dayChipGroup"
             android:layout_width="match_parent"
@@ -44,7 +45,7 @@
             android:layout_marginEnd="@dimen/half_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_calories"
+            app:layout_constraintTop_toBottomOf="@+id/daily_calories"
             app:selectionRequired="true"
             app:checkedChip="@+id/todayChip"
             app:singleSelection="true">
@@ -73,7 +74,7 @@
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="YESTERDAY"
+                android:text="Yesterday"
                 android:tag="23/06/2021"
                 android:textSize="@dimen/_12sp"
                 app:checkedIconVisible="true" />
@@ -83,7 +84,7 @@
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TODAY"
+                android:text="Today"
                 android:tag="24/06/2021"
                 android:textSize="@dimen/_12sp"
                 app:checkedIconVisible="true" />
@@ -97,7 +98,23 @@
                 android:textSize="@dimen/_12sp"
                 app:checkedIconVisible="true" />
         </com.google.android.material.chip.ChipGroup>
-
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="No meals added for this day, Kindly add"
+    android:gravity="center"
+    android:visibility="gone"
+    android:layout_marginTop="@dimen/normal_margin"
+    android:drawableTint="@color/design_default_color_primary"
+    android:drawablePadding="@dimen/normal_margin"
+    app:showEmpty="@{viewwModel.isEmpty}"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/dayChipGroup"
+    app:drawableTopCompat="@drawable/ic_dish" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mealsRv"
             android:layout_width="match_parent"
@@ -106,7 +123,8 @@
             android:layout_marginTop="@dimen/half_margin"
             android:layout_marginEnd="@dimen/normal_margin"
             android:orientation="vertical"
-            app:listMeals="@{viewwModel.allMeals}"
+            app:showEmptyRecycleview="@{viewwModel.isEmpty()}"
+            app:listMeals="@{viewwModel.mealsByDay}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -20,18 +20,17 @@
             android:padding="@dimen/half_margin"
             android:src="@drawable/ic_baseline_set_meal_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timeOfMeal" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/updateBtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="36dp"
             android:layout_marginEnd="8dp"
             android:padding="@dimen/half_margin"
             android:src="@drawable/ic_baseline_edit_24"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/dayOfMeal" />
+            app:layout_constraintTop_toBottomOf="@+id/mealName" />
 
         <TextView
             android:id="@+id/mealName"
@@ -55,15 +54,27 @@
             android:textSize="@dimen/_14sp"
             android:textStyle="bold"
             app:chipName="@{meal.day}"
-            android:visibility="visible"
+            android:visibility="gone"
             app:checkedIconEnabled="true"
             android:checked="true"
             android:textColor="@color/black"
-            app:checkedIconTint="@color/purple_500"
+            app:checkedIconTint="@color/purple_200"
             app:checkedIcon="@drawable/ic_baseline_check_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Thursday" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/timeChipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/half_margin"
+            android:layout_marginTop="@dimen/half_margin"
+            android:layout_marginEnd="@dimen/half_margin"
+            app:selectionRequired="true"
+            app:checkedChip="@+id/todayChip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calories"
+            app:singleSelection="true">
         <com.google.android.material.chip.Chip
             android:id="@+id/timeOfMeal"
             style="@style/Widget.MaterialComponents.Chip.Choice"
@@ -73,15 +84,16 @@
             android:textStyle="bold"
             app:checkedIconEnabled="true"
             android:checked="true"
+            app:chipBackgroundColor="@color/pale"
             android:textColor="@color/black"
-            app:checkedIconTint="@color/purple_500"
+            app:checkedIconTint="@color/black"
             app:checkedIcon="@drawable/ic_baseline_check_24"
             app:chipName="@{meal.time}"
             android:layout_marginStart="@dimen/half_margin"
-     app:layout_constraintStart_toEndOf="@+id/dayOfMeal"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calories"
             tools:text="Lunch" />
-
+        </com.google.android.material.chip.ChipGroup>
 
         <TextView
             android:id="@+id/calories"
@@ -112,9 +124,7 @@
             android:layout_height="1dp"
             android:background="@color/colorRed"
             android:layout_marginTop="@dimen/half_margin"
-            app:layout_constraintTop_toBottomOf="@+id/serving" />
-
-
+            app:layout_constraintTop_toBottomOf="@+id/timeChipGroup" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
