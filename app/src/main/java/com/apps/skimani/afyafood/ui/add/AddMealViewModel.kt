@@ -10,10 +10,8 @@ import com.apps.skimani.afyafood.database.Meal
 import com.apps.skimani.afyafood.database.getDatabase
 import com.apps.skimani.afyafood.models.*
 import com.apps.skimani.afyafood.repository.AfyaRepository
-import com.apps.skimani.afyafood.ui.home.HomeViewModel
 import com.apps.skimani.foodie.utils.NetworkResult
 import kotlinx.coroutines.*
-import org.json.JSONObject
 import timber.log.Timber
 
 class AddMealViewModel(app: Application) : ViewModel() {
@@ -40,6 +38,9 @@ class AddMealViewModel(app: Application) : ViewModel() {
     private var _error = MutableLiveData<String>()
     val error: LiveData<String>
         get() = _error
+  private var _deleteFoodStatus = MutableLiveData<Int>()
+    val deleteFoodStatus: LiveData<Int>
+        get() = _deleteFoodStatus
 
     private var mealsJob = Job()
     private val uiScope = CoroutineScope(mealsJob + Dispatchers.IO)
@@ -48,6 +49,7 @@ class AddMealViewModel(app: Application) : ViewModel() {
     private val afyaRepository = AfyaRepository(database)
 
     init {
+       _deleteFoodStatus.value=0
         dummyList.add(
             BrandedList(
                 "Gither", "Githe", 3, "Kenya Githeri", "Kenya", 44,
@@ -77,9 +79,8 @@ class AddMealViewModel(app: Application) : ViewModel() {
     fun getFoodItemRoomDB() {
         uiScope.launch {
             val value = afyaRepository.fetchValue()
-//            Timber.e("VIEWMODEL ${value?.get(1)?.foodName}")
+            Timber.e("VIEWMODEL ${value?.size} ")
             _foodItemTempValue.postValue(value)
-//        tempFoodItems=afyaRepository.foodItems.value!!
         }
     }
 
@@ -95,7 +96,21 @@ class AddMealViewModel(app: Application) : ViewModel() {
         }
     }
 
-    fun getInstantItemsTest(query: String) {
+    /**
+     *Delete the food items after successfully meal insersion
+     *
+     * @param foodItem
+     */
+    fun deleteFoodItem(foodItem: ArrayList<Int>) {
+         uiScope.launch {
+          val status=afyaRepository.deleteFoodItem(foodItem)
+             _deleteFoodStatus.postValue(status)
+             Timber.e("Deleted $status")
+        }
+    }
+
+
+    private fun getInstantItemsTest(query: String) {
         uiScope.launch {
             _mealsSearchTest.postValue(dummyList)
         }

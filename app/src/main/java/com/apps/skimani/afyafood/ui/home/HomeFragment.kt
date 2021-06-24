@@ -37,6 +37,7 @@ class HomeFragment : Fragment() {
 
     }
     private lateinit var selectedChipTag: String
+    var totalConsumedCal=0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,7 +61,7 @@ class HomeFragment : Fragment() {
 
     private fun initViews() {
         val adapter = MealsAdapter(MealsAdapter.OnClickListener {
-
+            findNavController().navigate(R.id.HometoEdi)
         })
         binding.dailyCalories.setOnClickListener {
             findNavController().navigate(R.id.navigation_dashboard)
@@ -143,24 +144,44 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupObservers() {
+        homeViewModel.mealsByDay.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                Timber.e("Meals Success from ROOM ${it.size}")
+                var dailyCal=0
+                for (item in it) {
+                    dailyCal+=item.totalCalories.toDouble().toInt()
+                    Timber.d("Meal Name ${item.name} >> ${item.totalCalories}")
+                }
+                totalConsumedCal=dailyCal
+                Utils.setPreference(requireContext(),Utils.PREFS_DAILY_CALORIES,dailyCal.toString())
+                Timber.e("Total cal ${totalConsumedCal}")
+             refreshCaloriesLimit()
+            }
+        })
+
+
+
+    }
+    private fun refreshCaloriesLimit() {
         homeViewModel.dailyCaloriesLimit.observe(viewLifecycleOwner, Observer {
             if (it!="0"){
                 val limit=it.toString().toInt()
-                val totalConsumedCal=900
-                val remaining=totalConsumedCal-limit
-            binding.dailyCalories.text = "Daily Calories limit :$it"
-            binding.calories.text = " Remaining today :$remaining"
+                val totalConsumedCalo=Utils.getPreferences(requireContext(),Utils.PREFS_DAILY_CALORIES)!!.toDouble().toInt()
+                if (totalConsumedCalo!=0) {
+                    val remaining =  limit -totalConsumedCalo
+                    if (remaining>0) {
+                        binding.dailyCalories.text = "Daily Calories limit :$it Cal "
+                        binding.calories.text = " Remaining today :$remaining Cal"
+                    }else{
+                        binding.dailyCalories.text = "Daily Calories limit :$it Cal"
+                        binding.calories.text = "Exeeded your limit $totalConsumedCalo Cal"
+                    }
+                }else{
+                    binding.calories.text = " Remaining today :$it"
+
+                }
             }else{
                 binding.dailyCalories.text = "Kindly set your Daily Calories limit"
             }
-        })
-        homeViewModel.allMeals.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                Timber.e("Meals Success from ROOM ${it.size}")
-                for (item in it) {
-                    Timber.d("Meal Name ${item.name} >> ${item.totalCalories}")
-                }
-            }
-        })
-    }
+        })    }
 }

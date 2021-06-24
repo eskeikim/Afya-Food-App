@@ -1,10 +1,7 @@
 package com.apps.skimani.afyafood.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface FoodItemDao {
@@ -25,6 +22,9 @@ interface FoodItemDao {
 
     @Query("select * from Meal WHERE day=:dayQuery")
     suspend fun getMealsByDay(dayQuery:String): List<Meal>?
+
+    @Query("DELETE from fooditem where id in (:foodItem)")
+    suspend fun deleteFoodItem(foodItem: ArrayList<Int>):Int
 
 
 }

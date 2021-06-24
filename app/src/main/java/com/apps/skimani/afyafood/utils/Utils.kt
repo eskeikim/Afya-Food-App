@@ -42,6 +42,7 @@ class Utils {
 
         private const val PREFS_NAME = "afyaFood"
         const val PREFS_CALORIES_LIMIT = "calories_limit"
+        const val PREFS_DAILY_CALORIES = "daily_calories"
 
         /*** set shared preferences
          *  * @param con

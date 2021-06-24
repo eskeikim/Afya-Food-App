@@ -1,7 +1,6 @@
 package com.apps.skimani.afyafood.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.apps.skimani.afyafood.api.RestClient
 import com.apps.skimani.afyafood.database.AfyaDb
@@ -123,4 +122,16 @@ class AfyaRepository(private val database: AfyaDb) {
             Timber.d("Fetch DB ${database.foodItem.getAllMeals()}")
         }
     }
+
+    /**
+     *Delete the food item from Room DB
+     * @param meal
+     */
+    suspend fun deleteFoodItem(foodItem: ArrayList<Int>):Int {
+       return withContext(Dispatchers.IO) {
+            Timber.d("DELETE Food item")
+           database.foodItem.deleteFoodItem(foodItem)
+        }
+    }
+
 }

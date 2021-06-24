@@ -10,6 +10,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.apps.skimani.afyafood.R
 import com.apps.skimani.afyafood.databinding.FragmentPreferencesBinding
 import com.apps.skimani.afyafood.ui.add.AddMealViewModel
@@ -56,6 +57,7 @@ class PreferenceFragment : Fragment() {
             if (calLimit.isNotEmpty()  && calLimit.isDigitsOnly()){
                 Utils.setPreference(requireContext(),Utils.PREFS_CALORIES_LIMIT,calLimit)
                 Toast.makeText(requireContext(),"Daily calories updated",Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.navigation_home)
             }else{
                 Toast.makeText(requireContext(),"Enter valid Daily calories",Toast.LENGTH_SHORT).show()
             }

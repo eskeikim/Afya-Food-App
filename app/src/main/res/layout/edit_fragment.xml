@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.apps.skimani.afyafood.ui.add.AddMealViewModel" />
+    </data>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            tools:context=".ui.add.DashboardFragment">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="60dp"
+                android:orientation="vertical">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/footItemRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="@dimen/normal_margin"
+                    android:layout_marginTop="@dimen/normal_margin"
+                    android:layout_marginEnd="@dimen/normal_margin"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:listFoodtems="@{viewModel.foodItemTempValue}"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/food_item_list" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiMealName"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/half_margin"
+                    android:layout_marginTop="@dimen/half_margin"
+                    android:layout_marginEnd="@dimen/half_margin"
+                    android:hint="Enter Meal Name"
+                    app:prefixTextAppearance="@style/TextAppearance.AppCompat.Title">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/mealName"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:inputType="textCapWords" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/half_margin"
+                    android:layout_marginTop="@dimen/half_margin"
+                    android:layout_marginEnd="@dimen/half_margin"
+                    android:text="Choose Day of Meal"
+                    android:textSize="@dimen/_14sp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/dayChipGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/half_margin"
+                    android:layout_marginTop="@dimen/half_margin"
+                    android:layout_marginEnd="@dimen/half_margin"
+                    app:selectionRequired="true"
+                    app:checkedChip="@+id/todayChip"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/juzi2Chip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mon 22 June 2021"
+                        android:tag="22/06/2021"
+                        android:textSize="@dimen/_12sp"
+                        app:checkedIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/juziChip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tue 23 June 2021"
+                        android:textSize="@dimen/_12sp"
+                        app:checkedIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/yesterdayChip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="YESTERDAY"
+                        android:tag="23/06/2021"
+                        android:textSize="@dimen/_12sp"
+                        app:checkedIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/todayChip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Today"
+                        android:tag="24/06/2021"
+                        android:textSize="@dimen/_12sp"
+                        app:checkedIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/dateChip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Choose Date"
+                        android:textSize="@dimen/_12sp"
+                        app:checkedIconVisible="true" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/half_margin"
+                    android:layout_marginTop="@dimen/half_margin"
+                    android:layout_marginEnd="@dimen/half_margin"
+                    android:text="Choose Time of The Meal"
+                    android:textSize="@dimen/_14sp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/timeChipGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/half_margin"
+                    android:layout_marginTop="@dimen/half_margin"
+                    android:layout_marginEnd="@dimen/half_margin"
+                    app:checkedChip="@+id/breakfastChip"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/breakfastChip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Breakfast"
+                        android:tag="Breakfast"
+                        android:textSize="@dimen/_12sp"
+                        app:checkedIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/lunchChip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lunch"
+                        android:tag="Lunch"
+                        android:textSize="@dimen/_12sp"
+                        app:checkedIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/dinnerChip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dinner"
+                        android:tag="Dinner"
+                        android:textSize="@dimen/_12sp"
+                        app:checkedIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/dissertChip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dissert"
+                        android:tag="Dissert"
+                        android:textSize="@dimen/_12sp"
+                        app:checkedIconVisible="true" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiCalories"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/half_margin"
+                    android:layout_marginTop="@dimen/half_margin"
+                    android:layout_marginEnd="@dimen/half_margin"
+                    android:hint="Calories"
+                    app:prefixTextAppearance="@style/TextAppearance.AppCompat.Title">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/calories"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:inputType="textCapWords" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiServings"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/half_margin"
+                    android:layout_marginTop="@dimen/half_margin"
+                    android:layout_marginEnd="@dimen/half_margin"
+                    android:hint="Servings"
+                    app:prefixTextAppearance="@style/TextAppearance.AppCompat.Title">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/serving"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:inputType="textCapWords" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnSave"
+                    style="@style/MaterialButtonAddMeal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/normal_margin"
+                    android:layout_marginTop="@dimen/normal_margin"
+                    android:layout_marginEnd="@dimen/normal_margin"                android:text="Log this Meal"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+</layout>

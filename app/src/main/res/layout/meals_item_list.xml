@@ -12,113 +12,105 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/mealImage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="4dp"
-            android:padding="@dimen/half_margin"
-            android:src="@drawable/ic_baseline_set_meal_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/updateBtn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="8dp"
-            android:padding="@dimen/half_margin"
-            android:src="@drawable/ic_baseline_edit_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mealName" />
-
         <TextView
-            android:id="@+id/mealName"
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="4dp"
-            android:gravity="start"
-            android:textSize="@dimen/_14sp"
+            android:layout_marginStart="16dp"
+            android:textSize="16dp"
             android:textStyle="bold"
             app:generalName="@{meal.name}"
-            app:layout_constraintStart_toEndOf="@+id/mealImage"
-            app:layout_constraintTop_toTopOf="@+id/mealImage"
-            tools:text="Githeri" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/dayOfMeal"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/_14sp"
-            android:textStyle="bold"
-            app:chipName="@{meal.day}"
-            android:visibility="gone"
-            app:checkedIconEnabled="true"
-            android:checked="true"
-            android:textColor="@color/black"
-            app:checkedIconTint="@color/purple_200"
-            app:checkedIcon="@drawable/ic_baseline_check_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Thursday" />
+            tools:text="Berry Blue" />
+
+
+        <TextView
+            android:id="@+id/no_calories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="cal"
+            android:textSize="@dimen/_14sp"
+            app:layout_constraintEnd_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toTopOf="@+id/name" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="67"
+            android:layout_marginEnd="8dp"
+            app:generalName="@{meal.totalCalories}"
+            android:textSize="@dimen/_14sp"
+            android:textColor="@color/colorRed"
+            app:layout_constraintEnd_toStartOf="@+id/removeBtn"
+            app:layout_constraintTop_toTopOf="@+id/name" />
+
+        <TextView
+            android:id="@+id/no_servings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Serving"
+            android:textSize="@dimen/_14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/servings"
+            app:layout_constraintEnd_toStartOf="@+id/servings"
+            app:layout_constraintTop_toBottomOf="@+id/name" />
+
+        <TextView
+            android:id="@+id/servings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2"
+            android:maxLength="4"
+            android:layout_marginEnd="8dp"
+            app:generalName="@{meal.serving}"
+            android:textSize="@dimen/_14sp"
+            android:textColor="@color/colorRed"
+            app:layout_constraintEnd_toStartOf="@+id/removeBtn"
+            app:layout_constraintTop_toBottomOf="@+id/name" />
+
+        <ImageView
+            android:id="@+id/removeBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_baseline_edit_24"
+            app:layout_constraintBottom_toBottomOf="@+id/servings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:tint="@color/design_default_color_primary" />
+
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/timeChipGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/half_margin"
-            android:layout_marginTop="@dimen/half_margin"
             android:layout_marginEnd="@dimen/half_margin"
-            app:selectionRequired="true"
             app:checkedChip="@+id/todayChip"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calories"
+            app:layout_constraintStart_toStartOf="@+id/name"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            app:selectionRequired="true"
             app:singleSelection="true">
-        <com.google.android.material.chip.Chip
-            android:id="@+id/timeOfMeal"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/_14sp"
-            android:textStyle="bold"
-            app:checkedIconEnabled="true"
-            android:checked="true"
-            app:chipBackgroundColor="@color/pale"
-            android:textColor="@color/black"
-            app:checkedIconTint="@color/black"
-            app:checkedIcon="@drawable/ic_baseline_check_24"
-            app:chipName="@{meal.time}"
-            android:layout_marginStart="@dimen/half_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calories"
-            tools:text="Lunch" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/timeOfMeal"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sp"
+                android:textStyle="bold"
+                app:checkedIcon="@drawable/ic_baseline_check_24"
+                app:checkedIconEnabled="true"
+                app:checkedIconTint="@color/black"
+                app:chipBackgroundColor="@color/pale"
+                app:chipName="@{meal.time}"
+                tools:text="Lunch" />
         </com.google.android.material.chip.ChipGroup>
 
-        <TextView
-            android:id="@+id/calories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/half_margin"
-            android:gravity="end"
-            android:textSize="16sp"
-            app:generalName="@{meal.totalCalories}"
-            android:textStyle="italic"
-            app:layout_constraintStart_toStartOf="@+id/mealName"
-            app:layout_constraintTop_toBottomOf="@+id/mealName"
-            tools:text="70 cal" />
- <TextView
-            android:id="@+id/serving"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/half_margin"
-            android:gravity="end"
-            android:textSize="16sp"
-            android:textStyle="italic"
-            app:generalName="@{meal.serving}"
-            app:layout_constraintStart_toStartOf="@+id/mealName"
-            app:layout_constraintTop_toBottomOf="@+id/calories"
-            tools:text="70 Servings" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
