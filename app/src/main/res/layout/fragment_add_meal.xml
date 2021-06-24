@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="60dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:orientation="vertical">
 
 
@@ -80,6 +81,7 @@
                 android:layout_marginStart="@dimen/half_margin"
                 android:layout_marginTop="@dimen/half_margin"
                 android:layout_marginEnd="@dimen/half_margin"
+                app:selectionRequired="true"
                 app:checkedChip="@+id/todayChip"
                 app:singleSelection="true">
 
@@ -89,6 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mon 22 June 2021"
+                    android:tag="22/06/2021"
                     android:textSize="@dimen/_12sp"
                     app:checkedIconVisible="true" />
 
@@ -107,6 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="YESTERDAY"
+                    android:tag="23/06/2021"
                     android:textSize="@dimen/_12sp"
                     app:checkedIconVisible="true" />
 
@@ -116,6 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TODAY"
+                    android:tag="24/06/2021"
                     android:textSize="@dimen/_12sp"
                     app:checkedIconVisible="true" />
 

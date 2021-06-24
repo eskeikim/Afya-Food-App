@@ -1,9 +1,12 @@
 package com.apps.skimani.afyafood.ui.home
 
+import android.app.DatePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -13,7 +16,11 @@ import com.apps.skimani.afyafood.adapters.FoodItemAdpater
 import com.apps.skimani.afyafood.adapters.MealsAdapter
 import com.apps.skimani.afyafood.databinding.FragmentHomeBinding
 import com.apps.skimani.afyafood.models.FoodResponse
+import com.apps.skimani.afyafood.utils.Utils
+import com.google.android.material.chip.Chip
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HomeFragment : Fragment() {
 
@@ -22,10 +29,13 @@ class HomeFragment : Fragment() {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onViewCreated()"
         }
-        ViewModelProvider(this, HomeViewModel.Factory(activity.application)).get(HomeViewModel::class.java)
+        ViewModelProvider(
+            this,
+            HomeViewModel.Factory(activity.application)
+        ).get(HomeViewModel::class.java)
 
     }
-
+    private lateinit var selectedChipTag: String
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,8 +45,8 @@ class HomeFragment : Fragment() {
         /**
          * Specify the viewmodel the layout will use to bind data from the viewmodel
          */
-        binding.viewwModel=homeViewModel
-        binding.lifecycleOwner=this
+        binding.viewwModel = homeViewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 
@@ -48,17 +58,91 @@ class HomeFragment : Fragment() {
     }
 
     private fun initViews() {
-        val adapter=MealsAdapter(MealsAdapter.OnClickListener{
+        val adapter = MealsAdapter(MealsAdapter.OnClickListener {
 
         })
-        binding.mealsRv.adapter=adapter
+        binding.mealsRv.adapter = adapter
+        selectedChipTag = Utils.getAnyDay(0, true)
+        binding.todayChip.tag = (Utils.getAnyDay(0, true))
+        binding.yesterdayChip.text = (Utils.getAnyDay(-1, false))
+        binding.yesterdayChip.tag = (Utils.getAnyDay(-1, true))
+        binding.juzi2Chip.tag = (Utils.getAnyDay(-3, true))
+        binding.juzi2Chip.text = (Utils.getAnyDay(-3, false))
+        binding.juziChip.tag = (Utils.getAnyDay(-2, true))
+        binding.juziChip.text = (Utils.getAnyDay(-2, false))
+
+        binding.todayChip.setOnClickListener {
+
+            fetchMeals(false)
+        }
+        binding.yesterdayChip.setOnClickListener {
+            fetchMeals(false)
+        }
+        binding.juziChip.setOnClickListener {
+            fetchMeals(false)
+        }
+        binding.juzi2Chip.setOnClickListener {
+            fetchMeals(false)
+        }
+        binding.dateChip.setOnClickListener {
+            chooseDate()
+        }
+
+    }
+
+    private fun fetchMeals(isCustom: Boolean) {
+        if (isCustom) {
+            Timber.d("Selected query $selectedChipTag")
+            fetchMealsFromRoomDB(selectedChipTag)
+        } else {
+            selectedChipTag =
+                binding.dayChipGroup.findViewById<Chip>(binding.dayChipGroup.checkedChipId).tag.toString()
+            Timber.d("Selected query $selectedChipTag")
+            fetchMealsFromRoomDB(selectedChipTag)
+        }
+
+    }
+
+    private fun fetchMealsFromRoomDB(query: String) {
+
+    }
+
+    private fun chooseDate() {
+        val dateListener: DatePickerDialog.OnDateSetListener
+        val myCalendar = Calendar.getInstance()
+        val currYear = myCalendar[Calendar.YEAR]
+        val currMonth = myCalendar[Calendar.MONTH]
+        val currDay = myCalendar[Calendar.DAY_OF_MONTH]
+        dateListener =
+            DatePickerDialog.OnDateSetListener { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+                myCalendar[Calendar.YEAR] = year
+                myCalendar[Calendar.MONTH] = monthOfYear
+                myCalendar[Calendar.DAY_OF_MONTH] = dayOfMonth
+                var isDateOk = true
+
+                val preferredFormat = "dd/MM/yyyy"
+                val date =
+                    SimpleDateFormat(preferredFormat, Locale.ENGLISH).format(myCalendar.time)
+                binding.dateChip.tag = Utils.formatRequestTag(date)
+                val textString = Utils.formatRequestDate(date)
+                binding.dateChip.text = textString
+                selectedChipTag = Utils.formatRequestTag(date)
+                fetchMeals(true)
+                Timber.e("DATEE $date ...${Utils.formatRequestTag(date)} ..SEL TAG $selectedChipTag")
+
+            }
+        DatePickerDialog(
+            requireContext(), dateListener, myCalendar[Calendar.YEAR],
+            myCalendar[Calendar.MONTH],
+            myCalendar[Calendar.DAY_OF_MONTH]
+        ).show()
     }
 
     private fun setupObservers() {
         homeViewModel.allMeals.observe(viewLifecycleOwner, Observer {
-            if (it!=null) {
+            if (it != null) {
                 Timber.e("Meals Success from ROOM ${it.size}")
-                for (item in it){
+                for (item in it) {
                     Timber.d("Meal Name ${item.name} >> ${item.totalCalories}")
                 }
             }

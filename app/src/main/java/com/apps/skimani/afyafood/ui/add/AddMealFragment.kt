@@ -3,12 +3,13 @@ package com.apps.skimani.afyafood.ui.add
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.annotation.IdRes
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +21,9 @@ import com.apps.skimani.afyafood.database.FoodItem
 import com.apps.skimani.afyafood.database.Meal
 import com.apps.skimani.afyafood.databinding.FragmentAddMealBinding
 import com.apps.skimani.afyafood.models.BrandedList
+import com.apps.skimani.afyafood.utils.Utils
 import com.apps.skimani.foodie.utils.NetworkResult
+import com.bumptech.glide.util.Util
 import com.google.android.material.chip.Chip
 import timber.log.Timber
 import java.util.*
@@ -85,8 +88,12 @@ private lateinit var foodItemAdapter: FoodItemAdpater
     private fun initViews() {
           foodItemAdapter=FoodItemAdpater(FoodItemAdpater.OnClickListener {
 
-        })
+          })
         binding.footItemRv.adapter=foodItemAdapter
+
+        binding.dateChip.setOnClickListener {
+            Utils.pickDate(requireContext(),binding.dateChip)
+        }
         binding.btnSave.setOnClickListener {
             val mealName=binding.mealName.text.toString()
             val serving=binding.serving.text.toString()
@@ -94,18 +101,17 @@ private lateinit var foodItemAdapter: FoodItemAdpater
 //            val time=binding.time.text.toString()
             val time=""
             var day=""
-            binding.dayChipGroup.setOnCheckedChangeListener { group, checkedId ->
-                val chip: Chip? = group.findViewById(checkedId)
-                chip?.let {
-                    Toast.makeText(chip.context, chip.text.toString(), Toast.LENGTH_SHORT).show()
-                    Timber.d("${chip.text} ${chip.tag}")
-                    day=chip.text.toString()
-                }
-                if (checkedId==R.id.todayChip){
-                    Timber.e("${chip?.text} ${chip?.tag}")
-                    Toast.makeText(chip?.context, chip?.text.toString(), Toast.LENGTH_SHORT).show()
-                }
-            }
+
+            val selectedChipText = binding.dayChipGroup.findViewById<Chip>(binding.dayChipGroup.checkedChipId).text.toString()
+            val selectedChipTag = binding.dayChipGroup.findViewById<Chip>(binding.dayChipGroup.checkedChipId).tag.toString()
+
+            println("CHECKED CHIPS" )
+            Log.e("CHECKED CHIPS", selectedChipText.toString() )
+            Timber.e("CHECKED CHIPS TEXT $selectedChipText ")
+            Timber.e("CHECKED CHIPS TAG $selectedChipTag ")
+            Timber.e("CHECKED CHIPS  cs")
+
+            val dates= listOf<String>("12/2/3021", "2/09/2021", "16/2/2021")
             /**
              * Add validation before saving
              */
@@ -113,8 +119,8 @@ private lateinit var foodItemAdapter: FoodItemAdpater
             /**
              * Save a User custom meal to Room database
              */
-            addMealViewModel.saveAMealRoomDB(meal)
-            clearfields()
+//            addMealViewModel.saveAMealRoomDB(meal)
+//            clearfields()
             Toast.makeText(requireContext(), "Meal inserted successfully", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.navigation_home)
         }

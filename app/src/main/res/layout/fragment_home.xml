@@ -35,6 +35,68 @@
             android:layout_marginStart="@dimen/half_margin"
             app:layout_constraintStart_toEndOf="@+id/tv_calories"
             app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/dayChipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/half_margin"
+            android:layout_marginTop="@dimen/half_margin"
+            android:layout_marginEnd="@dimen/half_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_calories"
+            app:selectionRequired="true"
+            app:checkedChip="@+id/todayChip"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/juzi2Chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mon 22 June 2021"
+                android:tag="22/06/2021"
+                android:textSize="@dimen/_12sp"
+                app:checkedIconVisible="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/juziChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tue 23 June 2021"
+                android:textSize="@dimen/_12sp"
+                app:checkedIconVisible="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/yesterdayChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="YESTERDAY"
+                android:tag="23/06/2021"
+                android:textSize="@dimen/_12sp"
+                app:checkedIconVisible="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/todayChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TODAY"
+                android:tag="24/06/2021"
+                android:textSize="@dimen/_12sp"
+                app:checkedIconVisible="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/dateChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose Date"
+                android:textSize="@dimen/_12sp"
+                app:checkedIconVisible="true" />
+        </com.google.android.material.chip.ChipGroup>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mealsRv"
@@ -48,7 +110,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_calories"
+            app:layout_constraintTop_toBottomOf="@+id/dayChipGroup"
             tools:itemCount="5"
             tools:listitem="@layout/meals_item_list" />
 
