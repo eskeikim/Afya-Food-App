@@ -50,32 +50,18 @@ class AddMealViewModel(app: Application) : ViewModel() {
 
     init {
        _deleteFoodStatus.value=0
-        dummyList.add(
-            BrandedList(
-                "Gither", "Githe", 3, "Kenya Githeri", "Kenya", 44,
-                "23", "32", BrandedPhoto(
-                    "",
-                    false, "https://nix-tag-images.s3.amazonaws.com/3917_thumb.jpg"
-                ), 33, 23, ""
-            ),
-        )
-        dummyList.add(
-            BrandedList(
-                "Rice", "Rice", 3, "Kenya Rice", "Kenya", 76,
-                "23", "32", BrandedPhoto(
-                    "",
-                    false, "https://nix-tag-images.s3.amazonaws.com/3917_thumb.jpg"
-                ), 33, 4, ""
-            ),
-        )
         getInstantItemsTest("")
         getFoodItemRoomDB()
     }
 
 //    val tempFoodItems = afyaRepository.foodItems
 
-
-    //    lateinit var tempFoodItems:List<FoodItem?>
+    /**
+     * Get food items from roomdb via Coroutine backckground thread
+     * and post the value to the _foodItemTempValue Mutablelivedata
+     * this is observed by the fragment layout with the help of data binding binding adapters
+     *
+     */
     fun getFoodItemRoomDB() {
         uiScope.launch {
             val value = afyaRepository.fetchValue()
@@ -84,12 +70,22 @@ class AddMealViewModel(app: Application) : ViewModel() {
         }
     }
 
+    /**
+     * Safely save a food item to room db via Coroutine IO thread
+     *
+     * @param foodItem
+     */
     fun saveFoodItemRoomDB(foodItem: FoodItem) {
         uiScope.launch {
             afyaRepository.saveFoodItem(foodItem)
         }
     }
 
+    /**
+     *  Safely save a meal to room db via Coroutine IO thread
+     *
+     * @param meal
+     */
     fun saveAMealRoomDB(meal: Meal) {
         uiScope.launch {
             afyaRepository.saveAMeal(meal)
@@ -109,7 +105,11 @@ class AddMealViewModel(app: Application) : ViewModel() {
         }
     }
 
-
+    /**
+     * Dummy data for instant items
+     *
+     * @param query
+     */
     private fun getInstantItemsTest(query: String) {
         uiScope.launch {
             _mealsSearchTest.postValue(dummyList)
@@ -117,7 +117,11 @@ class AddMealViewModel(app: Application) : ViewModel() {
     }
 
 
-
+    /**Get Instant search items from Nutritionix api
+     * Use SafeApicall to get result
+     * post the result in _mealsSearch mutable live data
+     * @param query
+     */
     fun getInstantItems(query: String) {
         uiScope.launch {
             val data = afyaRepository.getInstantfood(query)
@@ -134,6 +138,15 @@ class AddMealViewModel(app: Application) : ViewModel() {
         }
     }
 
+    /**
+     *
+     * Get food items from internet via Coroutine backckground thread
+     * and post the value to the _foodItem Mutablelivedata
+     * this is observed by the fragment layout with the help of data binding binding adapters
+     *
+    *
+     * @param query
+     */
     fun getFoodItems(query: String) {
         uiScope.launch {
             val data = afyaRepository.getfoodItem(query)
@@ -150,7 +163,10 @@ class AddMealViewModel(app: Application) : ViewModel() {
         }
     }
 
-
+    /**
+     * Clear the Coroutine Job
+     *
+     */
     override fun onCleared() {
         super.onCleared()
         uiScope.cancel()

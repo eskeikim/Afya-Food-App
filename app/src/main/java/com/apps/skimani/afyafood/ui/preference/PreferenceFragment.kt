@@ -51,6 +51,10 @@ class PreferenceFragment : Fragment() {
         })
     }
 
+    /**
+     * TODOInit views and set daily number of calories
+     *
+     */
     private fun initView() {
         binding.btnSave.setOnClickListener {
             val calLimit=binding.numberOfCalories.text.toString()

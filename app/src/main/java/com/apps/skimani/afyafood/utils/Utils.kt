@@ -35,10 +35,6 @@ import java.util.*
 //}
 class Utils {
     companion object {
-        fun getRequestBody(requestJson: JSONObject): RequestBody {
-            return requestJson.toString().toRequestBody("application/json".toMediaTypeOrNull())
-        }
-
 
         private const val PREFS_NAME = "afyaFood"
         const val PREFS_CALORIES_LIMIT = "calories_limit"
@@ -66,6 +62,9 @@ class Utils {
             return sharedPreferences.getString(key, "0")
         }
 
+        fun getRequestBody(requestJson: JSONObject): RequestBody {
+            return requestJson.toString().toRequestBody("application/json".toMediaTypeOrNull())
+        }
 
         fun pickDate(context: Context, chip: Chip) {
             val dateListener: DatePickerDialog.OnDateSetListener

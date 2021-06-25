@@ -59,6 +59,10 @@ class HomeFragment : Fragment() {
 
     }
 
+    /**
+     * Initialize views in this Fragment
+     *
+     */
     private fun initViews() {
         val adapter = MealsAdapter(MealsAdapter.OnClickListener {
             findNavController().navigate(R.id.HometoEdi)
@@ -95,6 +99,11 @@ class HomeFragment : Fragment() {
 
     }
 
+    /**
+     * Get checked tag from Material chips and fetch meals
+     *
+     * @param isCustom
+     */
     private fun fetchMeals(isCustom: Boolean) {
         if (isCustom) {
             Timber.d("Selected query $selectedChipTag")
@@ -108,10 +117,19 @@ class HomeFragment : Fragment() {
 
     }
 
+    /**
+     * Actually fetch meals from room DB
+     *
+     * @param query
+     */
     private fun fetchMealsFromRoomDB(query: String) {
        homeViewModel.getMealsByDay(query)
     }
 
+    /**
+     * Choose a custom date to view logged meals
+     *
+     */
     private fun chooseDate() {
         val dateListener: DatePickerDialog.OnDateSetListener
         val myCalendar = Calendar.getInstance()
@@ -143,6 +161,10 @@ class HomeFragment : Fragment() {
         ).show()
     }
 
+    /**
+     * Start observing livedat from viewmodel
+     *
+     */
     private fun setupObservers() {
         homeViewModel.mealsByDay.observe(viewLifecycleOwner, Observer {
             if (it != null) {
@@ -164,6 +186,11 @@ class HomeFragment : Fragment() {
 
 
     }
+
+    /**
+     * Refresh the calories textviews
+     *
+     */
     private fun refreshCaloriesLimit() {
         homeViewModel.dailyCaloriesLimit.observe(viewLifecycleOwner, Observer {
             if (it!="0"){

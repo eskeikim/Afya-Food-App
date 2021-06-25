@@ -14,6 +14,12 @@ abstract class AfyaDb : RoomDatabase() {
 
 private lateinit var INSTANCE: AfyaDb
 
+/**
+ * Crete the room Db
+ *
+ * @param context
+ * @return
+ */
 fun getDatabase(context: Context): AfyaDb {
     synchronized(AfyaDb::class.java) {
         if (!::INSTANCE.isInitialized) {

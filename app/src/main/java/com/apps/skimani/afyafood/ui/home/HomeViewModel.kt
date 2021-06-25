@@ -40,18 +40,13 @@ class HomeViewModel(app: Application) : ViewModel() {
 //        getAllMeals()
     }
 
-    fun getAllMeals() {
-        uiScope.launch {
-            val data = afyaRepository.fetchAllMeals()
-            Timber.d("ALL MEALS ${data?.size}")
-            if (data != null) {
-                for (item in data){
-                    Timber.d("Item Name ${item.name} >> ${item.totalCalories}")
-                }
-            }
-            _allMeals.postValue(data)
-        }
-    }
+    /**
+     * Get saved meals by the selected day via a background thread
+     * and post the value to the _mealsByDay Mutablelivedata
+     * this is observed by the homefragment layout with the help of data binding binding adapters
+     *Any error is observed and binded to the layout file
+     * @param query
+     */
     fun getMealsByDay(query:String) {
         uiScope.launch {
             val data = afyaRepository.fetchMealsByDay(query)
@@ -70,7 +65,26 @@ class HomeViewModel(app: Application) : ViewModel() {
             }
         }
     }
-
+    /**
+     * Get All saved meals
+     *
+     */
+    fun getAllMeals() {
+        uiScope.launch {
+            val data = afyaRepository.fetchAllMeals()
+            Timber.d("ALL MEALS ${data?.size}")
+            if (data != null) {
+                for (item in data){
+                    Timber.d("Item Name ${item.name} >> ${item.totalCalories}")
+                }
+            }
+            _allMeals.postValue(data)
+        }
+    }
+    /**
+     * Clear the Coroutine Job
+     *
+     */
     override fun onCleared() {
         super.onCleared()
         uiScope.cancel()

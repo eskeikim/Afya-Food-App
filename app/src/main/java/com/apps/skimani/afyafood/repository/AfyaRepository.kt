@@ -8,6 +8,7 @@ import com.apps.skimani.afyafood.database.FoodItem
 import com.apps.skimani.afyafood.database.Meal
 import com.apps.skimani.afyafood.models.FoodResponse
 import com.apps.skimani.afyafood.models.InstantFoodItemResponse
+import com.apps.skimani.afyafood.utils.Utils
 import com.apps.skimani.afyafood.utils.safeApiCall
 import com.apps.skimani.foodie.utils.NetworkResult
 import kotlinx.coroutines.Dispatchers
@@ -25,12 +26,21 @@ class AfyaRepository(private val database: AfyaDb) {
 //    val foodItemTemp: LiveData<List<FoodItem>>
 //        get() = database.foodItem.getItems()
 
-
+    /**
+     * Use SafeApiCall to map the network response
+     *
+     * @param query
+     */
     suspend fun getInstantfood(query: String) = safeApiCall(
         call = { getInstanttems(query) },
         errorMessage = "Error occurred"
     )
-
+    /**
+     * Fetch instant food items from newtork
+     *
+     * @param query
+     * @return
+     */
     private suspend fun getInstanttems(query: String): NetworkResult<InstantFoodItemResponse> {
         val response = RestClient.apiService.fetchInstantItems(query)
         return when {
@@ -45,15 +55,26 @@ class AfyaRepository(private val database: AfyaDb) {
         }
     }
 
+    /**
+     * Use SafeApiCall to map the network response
+     *
+     * @param query
+     */
     suspend fun getfoodItem(query: String) = safeApiCall(
         call = { getFoodtems(query) },
         errorMessage = "Error occurred"
     )
 
+    /**
+     * Fetch food items from newtork
+     *
+     * @param query
+     * @return
+     */
     private suspend fun getFoodtems(query: String): NetworkResult<FoodResponse> {
         val jsObj = JSONObject()
         jsObj.put("query", query)
-        val response = RestClient.apiService.listFoodItem(getRequestBody(jsObj))
+        val response = RestClient.apiService.listFoodItem(Utils.getRequestBody(jsObj))
         return when {
             response.isSuccessful -> {
                 Timber.d("repo Data ${response.body()}")
@@ -66,9 +87,6 @@ class AfyaRepository(private val database: AfyaDb) {
         }
     }
 
-    fun getRequestBody(requestJson: JSONObject): RequestBody {
-        return requestJson.toString().toRequestBody("application/json".toMediaTypeOrNull())
-    }
 
     /**
      * Return a list of foodItems to be displayed
@@ -79,17 +97,34 @@ class AfyaRepository(private val database: AfyaDb) {
             it.reversed()
         }
 
+    /**
+     * Get food items
+     *
+     * @return
+     */
     suspend fun fetchValue(): List<FoodItem>? {
         return withContext(Dispatchers.IO) {
             database.foodItem.getItemsValue()
         }
     }
 
+    /**
+     * Fetch All meals
+     *
+     * @return
+     */
     suspend fun fetchAllMeals(): List<Meal>? {
         return withContext(Dispatchers.IO) {
             database.foodItem.getAllMeals()
         }
     }
+
+    /**
+     * Fetch meal by day
+     *
+     * @param query
+     * @return List<Meal>
+     */
     suspend fun fetchMealsByDay(query: String): List<Meal>? {
         return withContext(Dispatchers.IO) {
             database.foodItem.getMealsByDay(query)
