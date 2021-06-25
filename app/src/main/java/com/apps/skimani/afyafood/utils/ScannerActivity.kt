@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
+import android.widget.Toast
 import com.apps.skimani.afyafood.R
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
@@ -48,7 +49,8 @@ class ScannerActivity : Activity(), ResultHandler {
             ScannerActivity.Companion.TAG,
             "Scanend code type: " + rawResult.barcodeFormat.toString()
         )
-
+//        Toast.makeText(this,"Food item $rawResult scanned ",Toast.LENGTH_SHORT).show()
+        Constants.SCANNED_CODE=rawResult.text
         //Return error
         if (result == null) {
             setResult(RESULT_CANCELED, returnErrorCode(result, format))

@@ -156,6 +156,8 @@ class HomeFragment : Fragment() {
                 Utils.setPreference(requireContext(),Utils.PREFS_DAILY_CALORIES,dailyCal.toString())
                 Timber.e("Total cal ${totalConsumedCal}")
              refreshCaloriesLimit()
+            }else{
+                refreshCaloriesLimit()
             }
         })
 
@@ -177,7 +179,7 @@ class HomeFragment : Fragment() {
                         binding.calories.text = "Exeeded your limit $totalConsumedCalo Cal"
                     }
                 }else{
-                    binding.calories.text = " Remaining today :$it"
+                    binding.calories.text = " Remaining today :$it Cal"
 
                 }
             }else{

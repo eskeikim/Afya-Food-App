@@ -1,7 +1,10 @@
 package com.apps.skimani.afyafood.ui.add
 
+import android.Manifest
+import android.R.attr
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +26,7 @@ import com.apps.skimani.afyafood.database.FoodItem
 import com.apps.skimani.afyafood.database.Meal
 import com.apps.skimani.afyafood.databinding.FragmentAddMealBinding
 import com.apps.skimani.afyafood.models.BrandedList
+import com.apps.skimani.afyafood.utils.Constants
 import com.apps.skimani.afyafood.utils.ScannerActivity
 import com.apps.skimani.afyafood.utils.Utils
 import com.apps.skimani.foodie.utils.NetworkResult
@@ -47,6 +52,8 @@ private lateinit var foodItemAdapter: FoodItemAdpater
     private lateinit var selectedTimeChipTag: String
     private var isCustomDate: Boolean=false
     private val SCAN_SERIAL_REQUEST=920
+    private val MY_PERMISSIONS_REQUEST_CAMERA=101
+    private val CAMERA_CODE=777
 
     /**
      * Initialize the viewmodel by lazy
@@ -103,8 +110,18 @@ private lateinit var foodItemAdapter: FoodItemAdpater
         binding.footItemRv.adapter=foodItemAdapter
 
         binding.scan.setOnClickListener {
-            val intent = Intent(requireContext(), ScannerActivity::class.java)
-            startActivityForResult(intent, SCAN_SERIAL_REQUEST)
+            if(checknGrantPermmision()) {
+                Constants.SCANNED_CODE=""
+                val intent = Intent(requireContext(), ScannerActivity::class.java)
+                startActivityForResult(intent, SCAN_SERIAL_REQUEST)
+            }
+            val scannerActivity=ScannerActivity.ScannerConstants.SCAN_RESULT
+            Toast.makeText(
+                requireContext(),
+                "ADD Food item $scannerActivity scanned ",
+                Toast.LENGTH_SHORT
+            ).show()
+
         }
         binding.dateChip.setOnClickListener {
             Utils.pickDate(requireContext(), binding.dateChip)
@@ -227,11 +244,11 @@ private lateinit var foodItemAdapter: FoodItemAdpater
          */
         addMealViewModel.deleteFoodStatus.observe(viewLifecycleOwner, Observer {
             if (it != null && it > 0) {
-                Toast.makeText(
-                    requireContext(),
-                    "Successfully cleared food items",
-                    Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    requireContext(),
+//                    "Successfully cleared food items",
+//                    Toast.LENGTH_SHORT
+//                ).show()
             }
         })
 
@@ -368,5 +385,61 @@ private fun chooseDate() {
         myCalendar[Calendar.DAY_OF_MONTH]
     ).show()
 }
+    fun checknGrantPermmision():Boolean{
 
+        val permission = ContextCompat.checkSelfPermission(
+            requireActivity().applicationContext,
+            Manifest.permission.CAMERA
+        )
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Timber.v("Permission to record denied")
+            makePermisionRequest()
+            return false
+        }
+        return  true
+    }
+    private fun makePermisionRequest() {
+        requestPermissions(arrayOf(Manifest.permission.CAMERA), MY_PERMISSIONS_REQUEST_CAMERA)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_CAMERA -> {
+                // If request is cancelled, the result arrays are empty.
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    val intent = Intent(requireContext(), ScannerActivity::class.java)
+                    startActivityForResult(intent, SCAN_SERIAL_REQUEST)
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+//                    Toast.makeText(requireContext(),"Permission denied! ",Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+
+            // Add other 'when' lines to check for other
+            // permissions this app might request.
+            else -> {
+                // Ignore all other requests.
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (data!=null){
+            val intent=data?.extras
+            val scan=ScannerActivity.ScannerConstants.SCAN_RESULT
+            val dat=intent?.getString(scan)
+            Toast.makeText(requireContext(),"Food item $dat scanned ",Toast.LENGTH_SHORT).show()
+//
+        }
+
+    }
 }

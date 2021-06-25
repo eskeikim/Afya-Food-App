@@ -25,6 +25,11 @@ class Constants {
          * Nutritionix Api App KEY- replace with Yours
          */
         var APP_KEY="cd2f1b032944923808854e03cdf48b66"
+        /**
+         * Get the scanned code
+         */
+        var SCANNED_CODE=""
+
     }
 
 

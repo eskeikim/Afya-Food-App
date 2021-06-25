@@ -9,6 +9,12 @@
             name="viewModel"
             type="com.apps.skimani.afyafood.ui.add.AddMealViewModel" />
     </data>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        tools:context=".ui.add.DashboardFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,15 +47,10 @@
             android:src="@drawable/ic_barcode"
             />
          </LinearLayout>
-        <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        tools:context=".ui.add.DashboardFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="60dp"
             android:orientation="vertical">
 
@@ -57,14 +58,14 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/footItemRv"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/normal_margin"
                 android:layout_marginTop="@dimen/normal_margin"
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:listFoodtems="@{viewModel.foodItemTempValue}"
-                tools:itemCount="4"
+                tools:itemCount="3"
                 tools:listitem="@layout/food_item_list" />
 
 
@@ -263,6 +264,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold" />
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
     </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 </layout>
