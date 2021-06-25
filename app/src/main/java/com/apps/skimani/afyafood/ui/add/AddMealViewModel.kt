@@ -36,8 +36,13 @@ class AddMealViewModel(app: Application) : ViewModel() {
         get() = _foodItemTempValue
 
     private var _error = MutableLiveData<String>()
-    val error: LiveData<String>
+    val instanterror: LiveData<String>
         get() = _error
+
+    private var _instantError = MutableLiveData<String>()
+    val instantError: LiveData<String>
+        get() = _instantError
+
   private var _deleteFoodStatus = MutableLiveData<Int>()
     val deleteFoodStatus: LiveData<Int>
         get() = _deleteFoodStatus
@@ -132,7 +137,7 @@ class AddMealViewModel(app: Application) : ViewModel() {
                 }
                 is NetworkResult.Error -> {
                     Timber.d("Data error ${data.exception.message}")
-                    _error.postValue("Error ")
+                    _instantError.postValue("${data} ")
                 }
             }
         }

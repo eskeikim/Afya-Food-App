@@ -31,6 +31,8 @@ import com.apps.skimani.afyafood.utils.ScannerActivity
 import com.apps.skimani.afyafood.utils.Utils
 import com.apps.skimani.foodie.utils.NetworkResult
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
+import org.json.JSONObject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -277,11 +279,23 @@ private lateinit var foodItemAdapter: FoodItemAdpater
                 }
             }
         })
+        /**
+         * Get Food items stored in roomdb
+         */
         addMealViewModel.foodItemTempValue.observe(viewLifecycleOwner, Observer {
             Timber.e("Success ${it?.size}")
             foodItemList = it!!
             getById()
+            foodItemAdapter.notifyDataSetChanged()
         })
+        /**
+         * Get Food items stored in roomdb
+         */
+        addMealViewModel.instantError.observe(viewLifecycleOwner, Observer {
+          Timber.e("Error fetching the food  $it")
+            Snackbar.make(binding.searchAutoComplete,"Error fetching the food  :Usage limits exceeded",Snackbar.LENGTH_LONG).show()
+        })
+
     }
 
     private fun getById() {
@@ -321,7 +335,7 @@ private lateinit var foodItemAdapter: FoodItemAdpater
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 Timber.d("Text Search $s")
-                if (s?.length!! > 4) {
+                if (s?.length!! > 2) {
                     getData(s.toString())
                 }
 
@@ -343,6 +357,7 @@ private lateinit var foodItemAdapter: FoodItemAdpater
                     selectedItem.servingQty.toString(),
                     selectedItem.photo.thumb
                 )
+            binding.searchAutoComplete.setText("")
             /**
              * Insert the selected food item to room database
              */

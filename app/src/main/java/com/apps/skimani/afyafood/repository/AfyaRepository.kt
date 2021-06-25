@@ -82,7 +82,8 @@ class AfyaRepository(private val database: AfyaDb) {
             }
             else -> {
                 Timber.d("repo error ${response.code()}")
-                NetworkResult.Error(IOException("Error fetching the food"))
+                NetworkResult.Error(IOException("usage limits exceeded"))
+//                NetworkResult.Error(IOException(": Today Usage limits exceeded"))
             }
         }
     }
