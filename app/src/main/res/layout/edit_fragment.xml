@@ -228,7 +228,8 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/normal_margin"
                     android:layout_marginTop="@dimen/normal_margin"
-                    android:layout_marginEnd="@dimen/normal_margin"                android:text="Log this Meal"
+                    android:layout_marginEnd="@dimen/normal_margin"
+                    android:text="Update this Meal"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
             </LinearLayout>

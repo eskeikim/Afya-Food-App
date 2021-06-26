@@ -16,15 +16,27 @@ class Constants {
          * Pinner Cert URL to help in certificate pinning
          */
         var PINNER_URL="trackapi.nutritionix.com"
-
+//Account 1 test
         /**
          * Nutritionix Api App ID- replace with Yours
          */
-        var APP_ID="b9860860"
+//        var APP_ID="b9860860"
         /**
          * Nutritionix Api App KEY- replace with Yours
          */
-        var APP_KEY="cd2f1b032944923808854e03cdf48b66"
+//        var APP_KEY="cd2f1b032944923808854e03cdf48b66"
+
+        //Account 2 test
+        /**
+         * Nutritionix Api App ID- replace with Yours
+         */
+        var APP_ID="952fab51"
+        /**
+         * Nutritionix Api App KEY- replace with Yours
+         */
+//        var APP_KEY="90f1e2427c7095ee43722f1cb99f0902"// for review
+        var APP_KEY="0043f60a821329c4c68ab5680510efbb"//test
+
         /**
          * Get the scanned code
          */

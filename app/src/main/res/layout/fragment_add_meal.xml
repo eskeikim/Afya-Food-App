@@ -249,7 +249,7 @@
                     android:id="@+id/serving"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:inputType="textCapWords" />
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button

@@ -91,6 +91,12 @@ private lateinit var foodItemAdapter: FoodItemAdpater
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        tempFoodItemIdList= ArrayList<Int>()
+        foodItemAdapter=FoodItemAdpater(FoodItemAdpater.OnClickListener {
+
+        })
+        binding.footItemRv.adapter=foodItemAdapter
         initViews()
         namelist=ArrayList<String>()
         brandedList=ArrayList<BrandedList>()
@@ -105,11 +111,10 @@ private lateinit var foodItemAdapter: FoodItemAdpater
      *
      */
     private fun initViews() {
-        initChipsView()
-          foodItemAdapter=FoodItemAdpater(FoodItemAdpater.OnClickListener {
 
-          })
-        binding.footItemRv.adapter=foodItemAdapter
+        initChipsView()
+
+        foodItemAdapter.notifyDataSetChanged()
 
         binding.scan.setOnClickListener {
             if(checknGrantPermmision()) {
@@ -185,7 +190,7 @@ private lateinit var foodItemAdapter: FoodItemAdpater
                     addMealViewModel.deleteFoodItem(tempFoodItemIdList)
                     Toast.makeText(
                         requireContext(),
-                        "Meal size ${meal.name} Inserted successfully",
+                        "Meal size ${meal.name} Logged successfully",
                         Toast.LENGTH_SHORT
                     )
                         .show()
@@ -246,11 +251,11 @@ private lateinit var foodItemAdapter: FoodItemAdpater
          */
         addMealViewModel.deleteFoodStatus.observe(viewLifecycleOwner, Observer {
             if (it != null && it > 0) {
-//                Toast.makeText(
-//                    requireContext(),
-//                    "Successfully cleared food items",
-//                    Toast.LENGTH_SHORT
-//                ).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Successfully $it cleared food items",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
 
@@ -284,9 +289,11 @@ private lateinit var foodItemAdapter: FoodItemAdpater
          */
         addMealViewModel.foodItemTempValue.observe(viewLifecycleOwner, Observer {
             Timber.e("Success ${it?.size}")
+            if (it!=null){
             foodItemList = it!!
             getById()
             foodItemAdapter.notifyDataSetChanged()
+        }
         })
         /**
          * Get Food items stored in roomdb
@@ -300,7 +307,6 @@ private lateinit var foodItemAdapter: FoodItemAdpater
 
     private fun getById() {
 
-         tempFoodItemIdList= ArrayList<Int>()
         var totalCalories=0
         var totalCaloriesString=""
         for (food in foodItemList){
@@ -362,9 +368,14 @@ private lateinit var foodItemAdapter: FoodItemAdpater
              * Insert the selected food item to room database
              */
              addMealViewModel.saveFoodItemRoomDB(foodItem)
+            brandedList.clear()
+            tempBrandedList.clear()
+
             Timber.d("Selected Item $tempBrandedList")
             addMealViewModel.getFoodItemRoomDB()
             setupObservers()
+            foodItemAdapter.submitList(tempFoodItemList)
+
         }
     }
 

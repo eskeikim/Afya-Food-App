@@ -55,6 +55,7 @@ class AddMealViewModel(app: Application) : ViewModel() {
 
     init {
        _deleteFoodStatus.value=0
+        _foodItemTempValue.value=null
         getInstantItemsTest("")
         getFoodItemRoomDB()
     }
@@ -70,7 +71,7 @@ class AddMealViewModel(app: Application) : ViewModel() {
     fun getFoodItemRoomDB() {
         uiScope.launch {
             val value = afyaRepository.fetchValue()
-            Timber.e("VIEWMODEL ${value?.size} ")
+            Timber.e("VIEWMODEL FOOD ${value?.size} ")
             _foodItemTempValue.postValue(value)
         }
     }
